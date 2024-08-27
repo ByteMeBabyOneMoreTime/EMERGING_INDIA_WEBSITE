@@ -160,13 +160,13 @@
         </div>
 
 
-<div class="navigation_bar" >
+<div class="navigation_bar" style="display: flex;">
     {% for nav in Navigation_link %}
     <a href="{{ nav.Url }}" 
        style="{% if forloop.last %}order: -1;{% endif %}">{{nav.Name}}</a>
     {% endfor %}
 </div>
-        <div class="navigation_bar" style="background-color: rgb(186, 186, 186); padding: 0px;">
+        <div class="navigation_bar" style="display: flex; background-color: rgb(186, 186, 186); padding: 0px;">
     {% for nav in Navigation_link2 %}
     <a href="{{ nav.Url }}" 
        style=" {% if forloop.last %}order: -1;{% endif %}">{{nav.Name}}</a>
