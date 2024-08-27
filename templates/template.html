@@ -158,17 +158,21 @@
             </div>
             <!-- Navigation part -->
         </div>
-        <div class="navigation_bar">
-            {% for nav in Navigation_link %}
-            <a href=" {{ nav.Url }} ">{{nav.Name}}</a>
-            {% endfor %}
-        </div>
+        To move the last child of the `.navigation_bar` to the first position using inline CSS, you can use the `order` property in a flexbox layout. Here's how you can do it:
 
-        <div class="navigation_bar" style="background-color: rgb(186, 186, 186); padding: 0px;">
-            {% for nav in Navigation_link2 %}
-            <a href=" {{ nav.Url }} " style="color: black;">{{nav.Name}}</a>
-            {% endfor %}
-        </div>
+
+<div class="navigation_bar" style="display: flex;">
+    {% for nav in Navigation_link %}
+    <a href="{{ nav.Url }}" 
+       style="{% if forloop.last %}order: -1;{% endif %}">{{nav.Name}}</a>
+    {% endfor %}
+</div>
+        <div class="navigation_bar" style=" display: flex;">
+    {% for nav in Navigation_link2 %}
+    <a href="{{ nav.Url }}" 
+       style=" {% if forloop.last %}order: -1;{% endif %}">{{nav.Name}}</a>
+    {% endfor %}
+</div>
     </header>
 
     {% block content %}
