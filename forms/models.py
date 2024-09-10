@@ -555,7 +555,7 @@ class Volunteer_form(models.Model):
     mobile_number = models.CharField(validators=[phone_regex], max_length=17, blank=False)
     whatsapp_number = models.CharField(validators=[phone_regex], max_length=17, blank=False)
     
-    Aadhar_no = models.IntegerField()
+    Aadhar_no = models.CharField(max_length=200)
     Job_Profile = models.CharField(max_length=200)
     Profession = models.CharField(max_length=200)
     Work_experience_in_Ngo = models.CharField(max_length=200)

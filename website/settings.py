@@ -12,10 +12,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 
-# # Load .env file
-# load_dotenv()
+# Load .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -97,8 +97,8 @@ JAZZMIN_UI_TWEAKS = {
 # CUSTUM USER MODEL
 AUTH_USER_MODEL = 'users.User'
 
-LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = '/' 
+LOGIN_REDIRECT_URL = '/login/'
+LOGIN_URL = '/login/' 
 # Application definition
 
 
@@ -110,7 +110,7 @@ INSTALLED_APPS = [
     'gallery',
     'pages',
     'payments',
-    'jazzmin',
+    'jazzmin', # jazzmin
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

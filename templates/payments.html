@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Options</title>
+</head>
+<body style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4; margin: 0;">
+
+    <div style="text-align: center;">
+        <a href="{% url 'payments:create_order1' %}" 
+           style="display: inline-block; padding: 12px 24px; background-color: #c11b1b; color: white; text-decoration: none; border-radius: 5px; font-size: 16px; font-family: 'Poppins', sans-serif; margin: 10px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s ease; width: 250px; text-align: center;" 
+           onmouseover="this.style.backgroundColor='#a31818';" 
+           onmouseout="this.style.backgroundColor='#c11b1b';">
+           Pay only for membership
+        </a>
+        <br>
+        <a href="{% url 'payments:create_order2' %}" 
+           style="display: inline-block; padding: 12px 24px; background-color: #333; color: white; text-decoration: none; border-radius: 5px; font-size: 16px; font-family: 'Poppins', sans-serif; margin: 10px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s ease; width: 250px; text-align: center;" 
+           onmouseover="this.style.backgroundColor='#222';" 
+           onmouseout="this.style.backgroundColor='#333';">
+           Pay for membership + id card + joining letter
+        </a>
+    </div>
+</body>
+</html>

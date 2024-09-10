@@ -32,6 +32,7 @@ def Home(request):
     }
     return render(request=request, template_name='index.html', context=context)
 
+
 def team_members(request):
     nav_link = Navigation_link.objects.all()
     context = {
@@ -39,11 +40,14 @@ def team_members(request):
         'team_members':Team_member.objects.all()}
     return render(request, 'team_members.html', context=context)
 
+
 @login_required(login_url='/login/')
 def id_card_page(request):
     if request.POST:
-        if pay.payment.objects.filter(user= request.user).exists() == False:
-            return redirect('create_order/')
+        if pay.payment.objects.filter(user = request.user).exists() == False:
+            return redirect('create_order/order2')
+        elif (int(pay.payment.objects.filter(user = request.user).first().amount) >= int(pay.full_premium.objects.first().cost_of_id_and_volunteer)) == False:
+            return redirect('create_order/order2')
         else:
             id = request.user.id
             user = User.objects.get(pk=id)
@@ -60,8 +64,10 @@ def id_card_page(request):
             return response
 
     if request.user:
-        if pay.payment.objects.filter(user= request.user).exists() == False:
-            return redirect('create_order/')
+        if pay.payment.objects.filter(user = request.user).exists() == False:
+            return redirect('create_order/order2')
+        elif (int(pay.payment.objects.filter(user = request.user).first().amount) >= int(pay.full_premium.objects.first().cost_of_id_and_volunteer)) == False:
+            return redirect('create_order/order2')
         else:
             user = User.objects.get(pk=request.user.id)
             if str(user.profile_picture.url) == '/media/profile/default.png':
@@ -72,3 +78,53 @@ def id_card_page(request):
                     'Navigation_link' : Navigation_link.objects.all(),
                     'SocialMedia_and_HelpLine': SocialMedia_and_HelpLine.objects.all()
                 })
+            
+
+@login_required(login_url='/login/')
+def joining_page(request):
+    
+    if pay.payment.objects.filter(user = request.user).exists() == False:
+        return redirect('create_order/order2')
+    elif (int(pay.payment.objects.filter(user = request.user).first().amount) >= int(pay.full_premium.objects.first().cost_of_id_and_volunteer)) == False:
+        return redirect('create_order/order2')
+    else:
+        from reportlab.lib.pagesizes import A4
+        from reportlab.pdfgen import canvas
+        from io import BytesIO
+        from datetime import date
+        id = request.user.id
+        user = User.objects.get(pk=id)
+        buffer = BytesIO()
+        # Create a canvas for the PDF
+        p = canvas.Canvas(buffer, pagesize=A4)
+        width, height = A4
+
+        # Add some content to the PDF
+        p.setFont("Helvetica-Bold", 14)
+        p.drawString(100, height - 100, "Emerging India Foundation")
+        p.setFont("Helvetica", 12)
+        p.drawString(100, height - 140, f"Date: {user.date_joined}")
+        full_name = user.first_name + " " + user.last_name
+        p.drawString(100, height - 180, f"Dear {full_name}(id: {user.user_id}),")
+        
+        p.drawString(100, height - 220, "Congratulations! We are pleased to offer you the position of Volunteer")
+        p.drawString(100, height - 240, "with the Emerging India Foundation.")
+        
+        p.drawString(100, height - 280, "We are excited to have you on board and look forward to your contribution.")
+        p.drawString(100, height - 300, "Thank you for your interest in supporting our cause.")
+        
+        p.drawString(100, height - 340, "Sincerely,")
+        p.drawString(100, height - 360, "Emerging India Foundation")
+        
+        # Save the PDF to the buffer
+        p.showPage()
+        p.save()
+
+        # Get the PDF value from the buffer
+        buffer.seek(0)
+        
+        # Create the HttpResponse to return the PDF
+        response = HttpResponse(buffer, content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="Joining_Letter_{full_name}.pdf"'
+
+        return response
