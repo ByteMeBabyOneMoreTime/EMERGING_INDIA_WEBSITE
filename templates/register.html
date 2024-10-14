@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <style>
+        /* Page styling */
         body {
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
@@ -16,140 +17,139 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            overflow: hidden;
+            /* Prevent body scrolling */
         }
 
         .container {
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
             max-width: 600px;
-            /* Increased max-width for more space */
             width: 100%;
+            max-height: 90vh;
+            /* Set max height */
+            overflow-y: auto;
+            /* Enable vertical scrolling */
             padding: 40px;
-            /* Increased padding for better spacing */
             display: flex;
             flex-direction: column;
             align-items: center;
-            /* Centering items */
-        }
-
-        .logo {
-            max-width: 150px;
-            /* Increased logo size */
-            display: block;
-            margin: 0 auto 30px;
-            /* Increased margin for better spacing */
         }
 
         h2 {
             color: #c11b1b;
             text-align: center;
             margin-bottom: 30px;
-            /* Increased margin for better spacing */
-        }
-
-        .error-message {
-            color: #D8000C;
-            background-color: #FFBABA;
-            border: 1px solid #D8000C;
-            padding: 10px;
-            border-radius: 5px;
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-            margin: 20px 0;
-            width: 100%;
-            text-align: center;
         }
 
         form {
             display: flex;
             flex-direction: column;
             width: 100%;
-            /* Full width form */
-        }
-
-        form p {
-            margin-bottom: 10px;
         }
 
         .form-control {
             padding: 15px;
-            /* Increased padding for better spacing */
             margin-bottom: 20px;
-            /* Increased margin for better spacing */
             border-radius: 5px;
             border: 1px solid #ccc;
             width: 100%;
             box-sizing: border-box;
         }
 
-        .form-control:focus {
-            outline: none;
-            border-color: #c11b1b;
-            box-shadow: 0 0 5px rgba(193, 27, 27, 0.5);
+        /* Style for the file upload field */
+        .file-upload {
+            background-color: #c11b1b;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-align: center;
+            width: 100%;
+            /* Full width */
+            position: relative;
+            /* Position for absolute text */
         }
 
-        .form-label {
-            font-weight: bold;
-            margin-bottom: 10px;
-            /* Increased margin for better spacing */
+        .file-upload:hover {
+            background-color: #a31313;
         }
 
+        .file-upload::-webkit-file-upload-button {
+            visibility: hidden;
+            /* Hide the default button */
+        }
+
+        .file-upload:before {
+            content: 'Choose Profile Picture';
+            display: inline-block;
+            background-color: #c11b1b;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            /* Full width */
+            text-align: center;
+            /* Center text */
+        }
+
+        .file-name {
+            margin-top: 10px;
+            color: #555;
+            /* Grey color for the file name */
+            font-size: 14px;
+            /* Smaller font size */
+            text-align: center;
+            /* Center the text */
+        }
+
+        /* Submit button */
         .btn-submit {
             background-color: #c11b1b;
             color: white;
             border: none;
             padding: 15px;
-            /* Increased padding for better spacing */
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s;
             margin-top: 20px;
-            /* Margin for better spacing */
         }
 
         .btn-submit:hover {
             background-color: #a31313;
         }
-
-        .login-link {
-            color: #c11b1b;
-            text-decoration: none;
-            font-weight: bold;
-            display: block;
-            text-align: center;
-            margin-top: 30px;
-            /* Increased margin for better spacing */
-        }
-
-        .login-link:hover {
-            text-decoration: underline;
-        }
     </style>
+    <script>
+        function validateFileSize(input) {
+            const file = input.files[0];
+            if (file && file.size > 200 * 1024) { // 200 KB limit
+                alert("File size must be less than 200KB");
+                input.value = ""; // Clear the file input
+                document.getElementById('file-name-display').innerText = ""; // Clear the displayed file name
+            } else {
+                // Display the selected file name
+                document.getElementById('file-name-display').innerText = file ? file.name : "";
+            }
+        }
+    </script>
 </head>
 
 <body>
     <div class="container">
-        <img src="{% static 'logo.png' %}" alt="logo" class="logo">
         <h2>Register</h2>
-        {% if messages %}
-        {% for message in messages %}
-        
-        {% if message.tags == 'error' %}
-        <div class="error-message">{{ message|safe }}</div>
-        {% endif %}
-        {% endfor %}
-        {% endif %}
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
+            <div class="file-name" id="file-name-display"></div> <!-- File name display -->
             <button type="submit" class="btn-submit">SIGN UP</button>
         </form>
-        <div>
-            <p>Already have an account? <a href="/login" class="login-link">Login</a></p>
-        </div>
     </div>
 </body>
 

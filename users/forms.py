@@ -17,15 +17,20 @@ class userRegistration(UserCreationForm):
     
     class Meta:
         model = get_user_model()
-        fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2']
+        fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2', 'profile_picture']
 
     def __init__(self, *args, **kwargs):
         super(userRegistration, self).__init__(*args, **kwargs)
         self.fields['first_name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'First Name'})
         self.fields['last_name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Last Name'})
-        self.fields['username'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Username'})
+        self.fields['username'].widget.attrs.update({'class': 'form-control', 'placeholder': 'You can enter your mobile number'})
         self.fields['password1'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Password'})
         self.fields['password2'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Confirm Password'})
+        self.fields['profile_picture'].widget.attrs.update({
+            'class': 'form-control file-upload',  # Add a class for custom styling
+            'id': 'fileUpload',
+            'onchange': 'validateFileSize(this)'  # Attach the JavaScript function for validation
+        })
 
 class UserLoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):

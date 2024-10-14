@@ -78,7 +78,16 @@ def id_card_page(request):
                     'Navigation_link' : Navigation_link.objects.all(),
                     'SocialMedia_and_HelpLine': SocialMedia_and_HelpLine.objects.all()
                 })
-            
+
+from forms.models import Volunteer_form
+def volunters(request):
+    approved_volunteers = Volunteer_form.objects.filter(status='Approved')
+    nav_link = Navigation_link.objects.all()
+    context = {
+        'volunteers': approved_volunteers,
+        'Navigation_link' : nav_link
+    }
+    return render(request, 'volunters.html', context=context)
 
 @login_required(login_url='/login/')
 def joining_page(request):

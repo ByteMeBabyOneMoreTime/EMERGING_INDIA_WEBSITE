@@ -61,7 +61,7 @@ def activateEmail(request, user, to_email):
 @user_not_authenticated
 def Register(request):
     if request.method == "POST":
-        form = userRegistration(request.POST)
+        form = userRegistration(request.POST, request.FILES)
         if form.is_valid():
             user = form.save(commit=False)
             user.is_active = False

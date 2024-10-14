@@ -1,0 +1,29 @@
+{% extends "template.html" %}
+{% load static %}
+
+{% block title %}
+Our Volunteers
+{% endblock title %}
+
+
+{% block content %}
+<div style="font-family: Arial, sans-serif; background-color: #f3f0f9; color: #4a148c; margin: 0; padding: 20px;">
+
+    <h1 style="text-align: center; font-size: 36px; margin-bottom: 20px;">Our Volunteers</h1>
+
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+
+        {% for x in volunteers %}
+        <div
+            style="background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden; width: 200px; text-align: center; padding: 15px; transition: transform 0.2s ease-in-out;">
+            <img src="{{ x.user.profile_picture.url }}" alt="{{ x.user.first_name }} {{ x.user.last_name }}"
+                style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px;">
+            <p style="font-size: 18px; font-weight: bold; color: #4a148c; margin: 0;">{{ x.user.first_name }}
+                {{x.user.last_name }}</p>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+{% endblock content %}

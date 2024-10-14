@@ -20,6 +20,10 @@ class Your_problem_form(models.Model):
 
     issue_is_related_to = models.TextField(max_length=300,null=False, blank=False)
 
+# added a message field too
+    message = models.TextField(null=True, blank=True, default=None, max_length=4000)
+
+
     Your_problem_state = models.CharField(max_length=200, null=False, blank=False)
     Your_problem_district = models.CharField(max_length=200,null=False, blank=False)
     Your_problem_block = models.CharField(max_length=120,null=False, blank=False)
