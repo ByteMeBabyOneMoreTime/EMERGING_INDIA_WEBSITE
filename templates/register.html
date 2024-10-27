@@ -5,127 +5,259 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'logo.png' %}" type="image/png">
     <title>Register</title>
     <style>
-        /* Page styling */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+        /* Basic reset */
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden;
-            /* Prevent body scrolling */
+            color: #333;
         }
 
         .container {
-            background-color: white;
+            background-color: #ffffff;
             border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             max-width: 600px;
-            width: 100%;
-            max-height: 90vh;
-            /* Set max height */
-            overflow-y: auto;
-            /* Enable vertical scrolling */
+            width: 90%;
             padding: 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            position: relative;
+            overflow-y: auto;
+            /* Allows vertical scrolling */
+            max-height: 90vh;
+            /* Set a maximum height for the container */
         }
+
 
         h2 {
             color: #c11b1b;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        /* Alert container styles */
+        .alert-container {
+            max-height: 150px;
+            /* Maximum height for the alert container */
+            overflow-y: auto;
+            /* Scroll when overflow occurs */
+            margin-bottom: 20px;
+            /* Margin between alerts and other content */
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .alert {
+            padding: 15px;
+            margin: 10px 0;
+            /* Margin between alerts */
+            border-radius: 5px;
+            color: rgb(255, 0, 0);
+            display: block;
+            /* Show alerts by default */
+        }
+
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border-color: #bee5eb;
+            text-align: center;
+        }
+
+        .alert-danger {
+            background-color: #c82333;
+            text-align: center;
         }
 
         form {
             display: flex;
             flex-direction: column;
-            width: 100%;
         }
 
         .form-control {
-            padding: 15px;
-            margin-bottom: 20px;
+            padding: 12px;
+            margin-bottom: 15px;
             border-radius: 5px;
             border: 1px solid #ccc;
-            width: 100%;
-            box-sizing: border-box;
+            transition: border-color 0.3s;
         }
 
-        /* Style for the file upload field */
+        .form-control:focus {
+            border-color: #c11b1b;
+            outline: none;
+        }
+
         .file-upload {
-            background-color: #c11b1b;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            text-align: center;
-            width: 100%;
-            /* Full width */
-            position: relative;
-            /* Position for absolute text */
+            display: none;
         }
 
-        .file-upload:hover {
+        .file-upload-label {
+            display: inline-block;
+            background-color: #c11b1b;
+            color: #ffffff;
+            padding: 12px;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .file-upload-label:hover {
             background-color: #a31313;
         }
 
-        .file-upload::-webkit-file-upload-button {
-            visibility: hidden;
-            /* Hide the default button */
-        }
-
-        .file-upload:before {
-            content: 'Choose Profile Picture';
-            display: inline-block;
-            background-color: #c11b1b;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            /* Full width */
-            text-align: center;
-            /* Center text */
-        }
-
         .file-name {
-            margin-top: 10px;
+            margin-top: 5px;
             color: #555;
-            /* Grey color for the file name */
             font-size: 14px;
-            /* Smaller font size */
             text-align: center;
-            /* Center the text */
         }
 
-        /* Submit button */
         .btn-submit {
             background-color: #c11b1b;
-            color: white;
+            color: #ffffff;
             border: none;
-            padding: 15px;
+            padding: 12px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s;
             margin-top: 20px;
+            /* More space before the button */
         }
 
         .btn-submit:hover {
             background-color: #a31313;
         }
+
+        .captcha-container {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .rules {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .rules h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #c11b1b;
+        }
+
+        .password-field {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .password-field input[type="checkbox"] {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        @media (max-width: 480px) {
+            h2 {
+                font-size: 20px;
+            }
+
+            .btn-submit {
+                font-size: 14px;
+            }
+
+            .rules {
+                font-size: 12px;
+            }
+        }
     </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Register</h2>
+
+        <!-- Alert container -->
+        <div class="alert-container">
+            <!-- Display Django messages -->
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+        </div>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="id_full_name">{{ form.full_name.label }}</label>
+            <input type="text" name="full_name" id="id_full_name" class="form-control" required>
+
+            <label for="id_username">{{ form.username.label }}</label>
+            <input type="text" name="username" id="id_username" class="form-control" required>
+
+            <label for="id_email">{{ form.email.label }}</label>
+            <input type="email" name="email" id="id_email" class="form-control" required>
+
+            <!-- Profile Picture Upload -->
+            <label class="file-upload-label" for="id_profile_picture">Choose Profile Picture</label>
+            <input type="file" id="id_profile_picture" name="profile_picture" class="file-upload" accept="image/*"
+                onchange="validateFileSize(this)">
+            <div class="file-name" id="file-name-display"></div> <!-- File name display -->
+
+            <div class="password-field">
+                <label for="id_password1">{{ form.password1.label }}</label>
+                <input type="password" name="password1" id="id_password1" class="form-control" required>
+                <input type="checkbox" id="show-password" onclick="togglePassword()">
+            </div>
+
+            <div class="password-field">
+                <label for="id_password2">{{ form.password2.label }}</label>
+                <input type="password" name="password2" id="id_password2" class="form-control" required>
+                <input type="checkbox" id="show-confirm-password" onclick="toggleConfirmPassword()">
+            </div>
+
+            <div class="captcha-container">
+                {{ form.captcha }} <!-- Add the CAPTCHA field -->
+            </div>
+
+            <div class="rules">
+                <h3>User ID and Password Rules</h3>
+                <ul>
+                    <li>User ID must be at least 6 characters long and can contain letters, numbers, and special
+                        characters.</li>
+                    <li>Password must be at least 8 characters long and include at least one uppercase letter, one
+                        lowercase letter, one number, and one special character.</li>
+                </ul>
+            </div>
+
+            <button type="submit" class="btn-submit">SIGN UP</button>
+        </form>
+    </div>
+
     <script>
         function validateFileSize(input) {
             const file = input.files[0];
@@ -134,23 +266,20 @@
                 input.value = ""; // Clear the file input
                 document.getElementById('file-name-display').innerText = ""; // Clear the displayed file name
             } else {
-                // Display the selected file name
                 document.getElementById('file-name-display').innerText = file ? file.name : "";
             }
         }
-    </script>
-</head>
 
-<body>
-    <div class="container">
-        <h2>Register</h2>
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <div class="file-name" id="file-name-display"></div> <!-- File name display -->
-            <button type="submit" class="btn-submit">SIGN UP</button>
-        </form>
-    </div>
+        function togglePassword() {
+            const passwordField = document.querySelector('#id_password1');
+            passwordField.type = passwordField.type === 'password' ? 'text' : 'password';
+        }
+
+        function toggleConfirmPassword() {
+            const confirmPasswordField = document.querySelector('#id_password2');
+            confirmPasswordField.type = confirmPasswordField.type === 'password' ? 'text' : 'password';
+        }
+    </script>
 </body>
 
 </html>

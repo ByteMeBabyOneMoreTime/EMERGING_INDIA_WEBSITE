@@ -333,3 +333,15 @@ GCP_PRIVATE_KEY_ID = os.getenv("GCP_PRIVATE_KEY_ID")
 GCP_PRIVATE_KEY = os.getenv("GCP_PRIVATE_KEY").replace("\\n", "\n")  # Handle newline characters
 GCP_CLIENT_ID = os.getenv("GCP_CLIENT_ID")
 GCP_CLIENT_X509_CERT_URL = os.getenv("GCP_CLIENT_X509_CERT_URL")
+
+
+# made passwords less rigid
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 4,  # Set this to any minimum length you prefer
+        }
+    },
+    # Other validators can be added here if needed
+]
