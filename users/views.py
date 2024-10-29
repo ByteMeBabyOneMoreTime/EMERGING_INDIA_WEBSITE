@@ -43,13 +43,14 @@ def activate(request, uidb64, token):
 def activateEmail(request, user, to_email):
     mail_subject = "EMERGING INDIA SITE EMAIL ACTIVATION"
     message = render_to_string("template_activate_account.html", {
-        'user': user.username,
+        'user': user.first_name,
         'domain': get_current_site(request).domain,
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
         'token': account_activation_token.make_token(user),
         "protocol": 'https' if request.is_secure() else 'http'
     })
     email = EmailMessage(mail_subject, message, to=[to_email])
+    email.content_subtype = "html"
     if email.send():
         messages.success(request, f'Dear {user}, please go to you email {to_email} inbox and click on received activation link to confirm and complete the registration. Note: Check your spam folder.')
     else:

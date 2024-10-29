@@ -1,5 +1,63 @@
 {% autoescape off %}
-Hi {{ user.username }},
-Please click on the link below to confirm your registration:
-{{ protocol }}://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333333;
+            padding: 20px;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #dddddd;
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <h1>Welcome, {{ user }}!</h1>
+        <p>Thank you for registering on our site. Please click the button below to confirm your registration:</p>
+        <div class="button-container">
+            <a href="{{ protocol }}://{{ domain }}{% url 'activate' uidb64=uid token=token %}" class="button">Confirm
+                Your Account</a>
+        </div>
+        <p>If you did not sign up for this account, you can ignore this email.</p>
+        <p>Best regards,<br>Team Emerging India</p>
+    </div>
+</body>
+
+</html>
 {% endautoescape %}

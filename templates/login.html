@@ -114,6 +114,19 @@
             font-weight: bold;
             margin-bottom: 5px;
         }
+
+        .password-toggle-container {
+            display: flex;
+            align-items: center;
+            margin-top: -10px;
+            margin-bottom: 15px;
+        }
+
+        .password-toggle-container label {
+            margin-left: 5px;
+            font-size: 14px;
+            color: #666;
+        }
     </style>
 </head>
 
@@ -132,12 +145,28 @@
             <form method="POST">
                 {% csrf_token %}
                 {{ form.as_p }}
+                <div class="password-toggle-container">
+                    <input type="checkbox" id="togglePassword" onclick="togglePasswordVisibility()">
+                    <label for="togglePassword">Show Password</label>
+                </div>
                 <button type="submit" class="btn-submit">Submit</button>
             </form>
             <p>No account? <a href="{% url 'register' %}" class="register-link">Register</a></p>
             <p>Forgot Password? <a href="{% url 'password_reset' %}" class="register-link">Reset Password</a></p>
         </div>
     </div>
+
+    <script>
+        function togglePasswordVisibility() {
+            const passwordField = document.querySelector("input[name='password']");
+            const checkbox = document.getElementById("togglePassword");
+            if (checkbox.checked) {
+                passwordField.type = "text";
+            } else {
+                passwordField.type = "password";
+            }
+        }
+    </script>
 </body>
 
 </html>
