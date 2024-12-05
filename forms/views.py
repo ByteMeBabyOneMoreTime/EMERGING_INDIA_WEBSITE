@@ -306,7 +306,7 @@ def Volunteer_panel(request):
 
                     document=up_document,
                     picture=up_photo,
-                    status = 'Uploaded'
+                    status = 'Approved'
                 )
                 form.save()
                 messages.success(request,'Application saved')

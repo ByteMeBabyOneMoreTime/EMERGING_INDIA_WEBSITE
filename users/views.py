@@ -30,7 +30,7 @@ def activate(request, uidb64, token):
         user = None
 
     if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
+        user.email_status = True
         user.save()
 
         messages.success(request, "Thank you for your email confirmation. Now you can login your account.")
@@ -58,6 +58,15 @@ def activateEmail(request, user, to_email):
 
 
 
+@login_required
+def request_email_verif(request):
+    if request.method == "POST":
+        try:
+            activateEmail(request, request.user, request.user.email)
+            return redirect(f'/profile/{request.user.username}')
+        except:
+            messages.error(request, f"Error creating payment order: {e}")
+            return redirect('/')
 
 @user_not_authenticated
 def Register(request):
@@ -65,10 +74,12 @@ def Register(request):
         form = userRegistration(request.POST, request.FILES)
         if form.is_valid():
             user = form.save(commit=False)
-            user.is_active = False
+            user.is_active = True
+            # made this thing True for Redirecting to the payment page
             user.save()
             activateEmail(request, user, form.cleaned_data.get('email'))
-            return redirect('/')
+            login(request, user)
+            return redirect('/forms/volunteer')
 
         else:
             for error in list(form.errors.values()):

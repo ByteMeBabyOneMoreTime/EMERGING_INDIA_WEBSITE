@@ -17,6 +17,7 @@ class User(AbstractUser):
         ('Moderator', 'Moderator')
     )
     email = models.EmailField(unique=True)
+    email_status = models.BooleanField(default=False)
     status = models.CharField(max_length=200, choices=STATUS, default='Regular')
 
 

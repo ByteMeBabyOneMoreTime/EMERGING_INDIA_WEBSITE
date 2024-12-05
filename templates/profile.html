@@ -92,7 +92,16 @@
                 </div>
             </form>
             {% if user.username == form.instance.username %}
-            <a href="{% url 'update_profile' %}" class="edit-link">EDIT DETAILS</a>
+            <a href="{% url 'update_profile' %}" class="edit-link">Edit Details</a>
+            {% endif %}
+            {% if user.username == form.instance.username and user.email_status == False %}
+            
+            <form method="post" action="{% url 'email_verif' %}">
+                {% csrf_token %}
+                <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; cursor: pointer;">
+                    Verify Email
+                  </button>    
+            </form>
             {% endif %}
         </div>
         <div>
@@ -106,6 +115,7 @@
             </p>
             <p><a href="{% url 'joining' %}">Download Joining letter</a></p>
             {% endif %}
+                        
             {% if certificates %}
             <hr>
             <h3 style="text-align: center; margin-top: 30px;">Certificates</h3>

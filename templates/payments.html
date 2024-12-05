@@ -3,24 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Options</title>
+    <title>Membership Plans</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .plans-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            width: 100%;
+            max-width: 1000px;
+        }
+        .plan-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            padding: 60px;
+            text-align: center;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .plan-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+        }
+        .plan-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .plan-price {
+            font-size: 36px;
+            font-weight: 600;
+            color: #c11b1b;
+            margin-bottom: 20px;
+        }
+        .plan-features {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+        .plan-features li {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            color: #666;
+        }
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+        .plan-btn {
+            display: inline-block;
+            width: 100%;
+            padding: 12px;
+            background-color: #c11b1b;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            margin-top: auto;
+        }
+        .plan-btn:hover {
+            background-color: #a31818;
+            transform: scale(1.02);
+        }
+        .premium-plan {
+            border: 2px solid #c11b1b;
+            transform: scale(1.05);
+        }
+        .recommended-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #ffd700;
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+    </style>
 </head>
-<body style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4; margin: 0;">
-
-    <div style="text-align: center;">
-        <a href="{% url 'payments:create_order1' %}" 
-           style="display: inline-block; padding: 12px 24px; background-color: #c11b1b; color: white; text-decoration: none; border-radius: 5px; font-size: 16px; font-family: 'Poppins', sans-serif; margin: 10px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s ease; width: 250px; text-align: center;" 
-           onmouseover="this.style.backgroundColor='#a31818';" 
-           onmouseout="this.style.backgroundColor='#c11b1b';">
-           Pay only for membership
-        </a>
-        <br>
-        <a href="{% url 'payments:create_order2' %}" 
-           style="display: inline-block; padding: 12px 24px; background-color: #333; color: white; text-decoration: none; border-radius: 5px; font-size: 16px; font-family: 'Poppins', sans-serif; margin: 10px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s ease; width: 250px; text-align: center;" 
-           onmouseover="this.style.backgroundColor='#222';" 
-           onmouseout="this.style.backgroundColor='#333';">
-           Pay for membership + id card + joining letter
-        </a>
+<body>
+    <div class="plans-container">
+        <div class="plan-card">
+            <h2 class="plan-title">Basic Membership</h2>
+            <div class="plan-price">₹100</div>
+            <ul class="plan-features">
+                <li>Membership Access</li>
+                <li>Basic Benefits</li>
+                <li>Community Access</li>
+                <li>Standard Support</li>
+            </ul>
+            <a href="{% url 'payments:create_order1' %}" class="plan-btn">Select Basic Plan</a>
+        </div>
+        
+        <div class="plan-card premium-plan">
+            <div class="recommended-badge">Recommended</div>
+            <h2 class="plan-title">Premium Membership</h2>
+            <div class="plan-price">₹500</div>
+            <ul class="plan-features">
+                <li>Full Membership Access</li>
+                <li>Physical ID Card</li>
+                <li>Official Joining Letter</li>
+                <li>Priority Support</li>
+                <li>Exclusive Resources</li>
+            </ul>
+            <a href="{% url 'payments:create_order2' %}" class="plan-btn">Select Premium Plan</a>
+        </div>
     </div>
 </body>
 </html>

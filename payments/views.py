@@ -41,7 +41,11 @@ def create_order1(request):
             return render(request, 'payment_gateway.html', context)
         except Exception as e:
             messages.error(request, f"Error creating payment order: {e}")
-            return redirect('/')
+            retry_count = request.session.get('retry', 0)
+            if (retry_count == 2):
+                return redirect('/')
+            request.session['retry'] = retry_count + 1
+            return redirect('/create_order/order1')
     else:
         messages.info(request, "You have already made a payment.")
         return redirect('/')
@@ -75,7 +79,11 @@ def create_order2(request):
             return render(request, 'payment_gateway2.html', context)
         except Exception as e:
             messages.error(request, f"Error creating payment order: {e}")
-            return redirect('/')
+            retry_count = request.session.get('retry', 0)
+            if (retry_count == 2):
+                return redirect('/')
+            request.session['retry'] = retry_count + 1
+            return redirect('/create_order/order2')
     elif (int(payment.objects.filter(user = request.user).first().amount) > int(full_premium.objects.first().cost_of_id_and_volunteer)) == False:
         try:
             amount_inrupee = int(full_premium.objects.first().cost_of_id_and_volunteer)
@@ -100,7 +108,11 @@ def create_order2(request):
             return render(request, 'payment_gateway2.html', context)
         except Exception as e:
             messages.error(request, f"Error creating payment order: {e}")
-            return redirect('/')
+            retry_count = request.session.get('retry', 0)
+            if (retry_count == 2):
+                return redirect('/')
+            request.session['retry'] = retry_count + 1
+            return redirect('/create_order/order2')
     else:
         messages.info(request, "You have already made a payment.")
         return redirect('/')
@@ -127,7 +139,7 @@ def payment_callback(request):
             payment_save.save()
 
             messages.success(request, 'Payment successful! Now you can apply to volunteer.')
-            return redirect('/')
+            return redirect('/forms/volunteer')
         except razorpay.errors.SignatureVerificationError as e:
             messages.error(request, f"Payment verification failed: {e}")
             return HttpResponseBadRequest("Invalid Payment Details")
@@ -159,7 +171,7 @@ def payment_callback2(request):
             payment_save.save()
 
             messages.success(request, 'Payment successful! Now you can generate your ID card and apply to volunteer.')
-            return redirect('/')
+            return redirect('/forms/volunteer')
         except razorpay.errors.SignatureVerificationError as e:
             messages.error(request, f"Payment verification failed: {e}")
             return HttpResponseBadRequest("Invalid Payment Details")

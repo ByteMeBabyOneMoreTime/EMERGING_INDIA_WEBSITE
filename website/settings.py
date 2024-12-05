@@ -110,7 +110,8 @@ INSTALLED_APPS = [
     'gallery',
     'pages',
     'payments',
-    'jazzmin', # jazzmin
+    'jazzmin', 
+    # jazzmin
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
