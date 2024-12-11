@@ -2,300 +2,648 @@
 {% load static %}
 
 {% block announcements %}
-<div class="navigation1">
-    <div class="nav">
-        <div class="social-media">
-            {% if SocialMedia_and_HelpLine.facebook %}
-            <a href="{{SocialMedia_and_HelpLine.facebook}}" target="_blank"><i class="fab fa-facebook-f"></i></a>
-            {% endif %}
-            {% if SocialMedia_and_HelpLine.twitter %}
-            <a href="{{SocialMedia_and_HelpLine.twitter}}" target="_blank"><i class="fab fa-twitter"></i></a>
-            {% endif %}
-            {% if SocialMedia_and_HelpLine.linkedin %}
-            <a href="{{SocialMedia_and_HelpLine.linkedin}}" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-            {% endif %}
-            {% if SocialMedia_and_HelpLine.instagram %}
-            <a href="{{SocialMedia_and_HelpLine.instagram}}" target="_blank"><i class="fab fa-instagram"></i></a>
-            {% endif %}
-            {% if SocialMedia_and_HelpLine.youtube %}
-            <a href="{{SocialMedia_and_HelpLine.youtube}}" target="_blank"><i class="fab fa-youtube"></i></a>
-            {% endif %}
 
+  <nav class="bg-red-600 shadow-md">
+    <div class="container mx-auto">
+        <!-- Desktop View -->
+        <div class="hidden md:flex justify-between items-center px-4 py-2">
+            <!-- Social Media Links -->
+            <div class="flex space-x-4 lg:space-x-6">
+                {% if SocialMedia_and_HelpLine.facebook %}
+                <a href="{{SocialMedia_and_HelpLine.facebook}}" target="_blank" 
+                   class="text-yellow-500 hover:text-yellow-400 transition-all duration-300 transform hover:scale-125">
+                    <i class="fab fa-facebook-f text-lg lg:text-xl"></i>
+                </a>
+                {% endif %}
+                
+                {% if SocialMedia_and_HelpLine.twitter %}
+                <a href="{{SocialMedia_and_HelpLine.twitter}}" target="_blank"
+                   class="text-yellow-500 hover:text-yellow-400 transition-all duration-300 transform hover:scale-125">
+                    <i class="fab fa-twitter text-lg lg:text-xl"></i>
+                </a>
+                {% endif %}
+                
+                {% if SocialMedia_and_HelpLine.linkedin %}
+                <a href="{{SocialMedia_and_HelpLine.linkedin}}" target="_blank"
+                   class="text-yellow-500 hover:text-yellow-400 transition-all duration-300 transform hover:scale-125">
+                    <i class="fab fa-linkedin-in text-lg lg:text-xl"></i>
+                </a>
+                {% endif %}
+                
+                {% if SocialMedia_and_HelpLine.instagram %}
+                <a href="{{SocialMedia_and_HelpLine.instagram}}" target="_blank"
+                   class="text-yellow-500 hover:text-yellow-400 transition-all duration-300 transform hover:scale-125">
+                    <i class="fab fa-instagram text-lg lg:text-xl"></i>
+                </a>
+                {% endif %}
+                
+                {% if SocialMedia_and_HelpLine.youtube %}
+                <a href="{{SocialMedia_and_HelpLine.youtube}}" target="_blank"
+                   class="text-yellow-500 hover:text-yellow-400 transition-all duration-300 transform hover:scale-125">
+                    <i class="fab fa-youtube text-lg lg:text-xl"></i>
+                </a>
+                {% endif %}
+            </div>
+
+            <!-- News Ticker -->
+            <div class="flex-1 mx-4 lg:mx-8">
+                <div class="flex items-center">
+                    <div class="bg-yellow-400 text-red-600 font-bold px-3 lg:px-4 py-1 rounded-l-lg shadow-md whitespace-nowrap text-sm lg:text-base">
+                        NEWS & UPDATES
+                    </div>
+                    <div class="bg-gradient-to-r from-white to-gray-200 flex-1 overflow-hidden rounded-r-lg">
+                        <marquee class="py-1 px-4" behavior="scroll" direction="left">
+                            {% for x in announcement %}
+                            {% if x.link %}
+                            <a href="{{ x.link }}" class="inline-block mr-8 text-black hover:text-yellow-300 transition-colors duration-300" target="_blank">
+                                <span class="bg-yellow-400 text-red-600 px-2 py-0.5 rounded-full text-xs mr-2">NEW</span>
+                                {{ x.announcement }}
+                            </a>
+                            {% else %}
+                            <span class="inline-block mr-8 text-black">
+                                <span class="bg-yellow-400 text-red-600 px-2 py-0.5 rounded-full text-xs mr-2">NEW</span>
+                                {{ x.announcement }}
+                            </span>
+                            {% endif %}
+                            {% endfor %}
+                        </marquee>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Helpline Number -->
+            {% if SocialMedia_and_HelpLine.helpline_no %}
+            <div class="flex items-center bg-yellow-400 px-3 lg:px-4 py-1 rounded-full shadow-sm hover:shadow-lg transition-shadow duration-300">
+                <span class="font-semibold text-red-600 mr-2 text-sm lg:text-base">
+                    <i class="fa-solid fa-phone animate-pulse"></i> Helpline:
+                </span>
+                <span class="text-red-700 font-bold text-sm lg:text-base">
+                    +91 {{ SocialMedia_and_HelpLine.helpline_no }}
+                </span>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Mobile View -->
+        <div class="md:hidden">
+            <!-- News Ticker -->
+            <div class="px-2 py-1">
+                <div class="flex items-center">
+                    <div class="bg-yellow-400 text-red-600 font-bold px-2 py-1 rounded-l-lg shadow-md text-xs whitespace-nowrap">
+                        NEWS
+                    </div>
+                    <div class="bg-gradient-to-r from-red-500 to-red-600 flex-1 overflow-hidden rounded-r-lg">
+                        <marquee class="py-1 px-2" behavior="scroll" direction="left">
+                            {% for x in announcement %}
+                            <span class="inline-block mr-6 text-white text-sm">
+                                <span class="bg-yellow-400 text-red-600 px-1.5 py-0.5 rounded-full text-xs mr-1">NEW</span>
+                                {{ x.announcement }}
+                            </span>
+                            {% endfor %}
+                        </marquee>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Media and Helpline -->
+            <div class="flex justify-between items-center px-2 py-1 bg-red-700">
+                <div class="flex space-x-4">
+                    {% if SocialMedia_and_HelpLine.facebook %}
+                    <a href="{{SocialMedia_and_HelpLine.facebook}}" target="_blank" 
+                       class="text-yellow-500 hover:text-yellow-400 transition-all duration-300">
+                        <i class="fab fa-facebook-f text-sm"></i>
+                    </a>
+                    {% endif %}
+                    
+                    {% if SocialMedia_and_HelpLine.instagram %}
+                    <a href="{{SocialMedia_and_HelpLine.instagram}}" target="_blank"
+                       class="text-yellow-500 hover:text-yellow-400 transition-all duration-300">
+                        <i class="fab fa-instagram text-sm"></i>
+                    </a>
+                    {% endif %}
+                    
+                    {% if SocialMedia_and_HelpLine.youtube %}
+                    <a href="{{SocialMedia_and_HelpLine.youtube}}" target="_blank"
+                       class="text-yellow-500 hover:text-yellow-400 transition-all duration-300">
+                        <i class="fab fa-youtube text-sm"></i>
+                    </a>
+                    {% endif %}
+                </div>
+
+                {% if SocialMedia_and_HelpLine.helpline_no %}
+                <div class="flex items-center bg-yellow-400 px-2 py-0.5 rounded-full shadow-sm text-xs">
+                    <span class="font-semibold text-red-600 mr-1">
+                        <i class="fa-solid fa-phone animate-pulse"></i>
+                    </span>
+                    <span class="text-red-700 font-bold">
+                        {{ SocialMedia_and_HelpLine.helpline_no }}
+                    </span>
+                </div>
+                {% endif %}
+            </div>
         </div>
     </div>
-</div>
-<div class="news-container" style="margin-left: 30px;">
-    <div class="ticker">
-        News and Updates
-    </div>
-    <div class="sub">
-        <marquee class="announcements">
-            {% for x in announcement %}
-            {% if x.link %}
-            <a href="{{ x.link }}" class="announcement-item" target="_blank">{{ x.announcement }}</a>
-            {% else %}
-            <a href="#" class="announcement-item">{{ x.announcement }}</a>
-            {% endif %}
-            {% endfor %}
-        </marquee>
-    </div>
-</div>
-<div class="helpline-container">
-    <div class="helpline-text">Helpline No. <i class="fa-solid fa-phone"> </i></div>
-    {% if SocialMedia_and_HelpLine.helpline_no %}
-    <div class="helpline-number">+91 {{ SocialMedia_and_HelpLine.helpline_no }}</div>
-    {% endif %}
-</div>
 </nav>
-</div>
-
 {% endblock announcements %}
 
 
-
-
-
 {% block content %}
-<style>
-    .alert {
-        padding: 20px;
-        margin-bottom: 20px;
-        border: 1px solid transparent;
-        border-radius: 5px;
-    }
+<!--- Alert Messages --->
+{% if messages %}
+<div class="space-y-4 mx-auto max-w-7xl px-4 py-6">
+    {% for message in messages %}
+    <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-lg">
+        <p class="text-blue-700 text-lg">{{ message }}</p>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
 
-    .alert-info {
-        color: #0c5460;
-        background-color: #d1ecf1;
-        border-color: #bee5eb;
-        text-align: center;
+<!--- Hero Section with Carousel --->
+
+  <div class="relative overflow-hidden bg-white">
+    <!-- Slides -->
+    <div class="home">
+        <!-- Slide 1 -->
+        <div class="content fade relative duration-[2000ms] ease-in-out zoom-effect">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70 z-10"></div>
+            <div class="absolute z-20 text-yellow-400 max-w-5xl mx-auto left-0 right-0 top-1/2 -translate-y-1/2 text-center px-6 animate-slideUp">
+                <span class="inline-block text-white text-sm md:text-base uppercase tracking-[0.2em] mb-4 animate-fadeIn">Making A Difference</span>
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight animate-scaleUp">
+                    WE FEED POOR PEOPLE, <br class="hidden md:block"> SERVE MEDICAL CARE
+                </h1>
+                <p class="text-xl md:text-2xl opacity-90 text-white mb-8 animate-slideUp delay-300">
+                    We are society-driven foundation focused on creating impactful change for those in need.
+                </p>
+                <a href="#learn-more" class="inline-block bg-yellow-500 text-black font-bold px-8 py-4 rounded-full hover:bg-yellow-400 transition-all duration-300 transform hover:scale-105 animate-fadeIn delay-500">
+                    Learn More
+                </a>
+            </div>
+            <img src="{% static 'Images/img1.jpg' %}" class="w-full h-[80vh] md:h-screen object-cover transform scale-100 origin-center transition-transform duration-[8000ms] zoom-effect" alt="Impact">
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="content fade relative duration-[2000ms] ease-in-out zoom-effect">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70 z-10"></div>
+            <div class="absolute z-20 text-yellow-400 max-w-5xl mx-auto left-0 right-0 top-1/2 -translate-y-1/2 text-center px-6 animate-slideUp">
+                <span class="inline-block text-white text-sm md:text-base uppercase tracking-[0.2em] mb-4 animate-fadeIn">Empowering Through Education</span>
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight animate-scaleUp">
+                    EMPOWER COMMUNITIES <br class="hidden md:block"> THROUGH EDUCATION
+                </h1>
+                <p class="text-xl md:text-2xl opacity-90 text-white mb-8 animate-slideUp delay-300">
+                    Providing education for underprivileged children to create lasting impact.
+                </p>
+                <a href="#donate" class="inline-block bg-yellow-500 text-black font-bold px-8 py-4 rounded-full hover:bg-yellow-400 transition-all duration-300 transform hover:scale-105 animate-fadeIn delay-500">
+                    Donate Now
+                </a>
+            </div>
+            <img src="{% static 'Images/img2.jpg' %}" class="w-full h-[80vh] md:h-screen object-cover transform scale-100 origin-center transition-transform duration-[8000ms] zoom-effect" alt="Education">
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="content fade relative duration-[2000ms] ease-in-out zoom-effect">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70 z-10"></div>
+            <div class="absolute z-20 text-yellow-400 max-w-5xl mx-auto left-0 right-0 top-1/2 -translate-y-1/2 text-center px-6 animate-slideUp">
+                <span class="inline-block text-white text-sm md:text-base uppercase tracking-[0.2em] mb-4 animate-fadeIn">Animal Welfare</span>
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight animate-scaleUp">
+                    WE RESCUE ANIMALS & <br class="hidden md:block"> ADVOCATE FOR THEM
+                </h1>
+                <p class="text-xl md:text-2xl opacity-90 text-white mb-8 animate-slideUp delay-300">
+                    Providing essential care and finding loving homes for rescued animals.
+                </p>
+                <a href="#volunteer" class="inline-block bg-yellow-500 text-black font-bold px-8 py-4 rounded-full hover:bg-yellow-400 transition-all duration-300 transform hover:scale-105 animate-fadeIn delay-500">
+                    Volunteer Now
+                </a>
+            </div>
+            <img src="{% static 'Images/img3.jpg' %}" class="w-full h-[80vh] md:h-screen object-cover transform scale-100 origin-center transition-transform duration-[8000ms] zoom-effect" alt="Animal Welfare">
+        </div>
+
+        <!-- Navigation Arrows -->
+        <button onclick="plusSlides(-1)" class="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-30 bg-black/30 hover:bg-yellow-500 p-3 md:p-4 rounded-full transition-all duration-300 group">
+            <svg class="w-6 h-6 md:w-8 md:h-8 text-white group-hover:text-black transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+        </button>
+        <button onclick="plusSlides(1)" class="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-30 bg-black/30 hover:bg-yellow-500 p-3 md:p-4 rounded-full transition-all duration-300 group">
+            <svg class="w-6 h-6 md:w-8 md:h-8 text-white group-hover:text-black transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+        </button>
+
+        <!-- Dots -->
+        <div class="absolute bottom-8 left-0 right-0 flex justify-center gap-3 z-30">
+            <button onclick="currentSlide(1)" class="dot w-4 h-4 rounded-full bg-white/30 hover:bg-yellow-500 transition-all duration-300 border-2 border-transparent hover:border-white"></button>
+            <button onclick="currentSlide(2)" class="dot w-4 h-4 rounded-full bg-white/30 hover:bg-yellow-500 transition-all duration-300 border-2 border-transparent hover:border-white"></button>
+            <button onclick="currentSlide(3)" class="dot w-4 h-4 rounded-full bg-white/30 hover:bg-yellow-500 transition-all duration-300 border-2 border-transparent hover:border-white"></button>
+        </div>
+    </div>
+</div>
+
+<!-- CSS -->
+<style>
+    .zoom-effect {
+        animation: zoomInOut 8s ease-in-out infinite;
+    }
+    
+    @keyframes zoomInOut {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.10);
+        }
+        100% {
+            transform: scale(1);
+        }
     }
 </style>
 
-{% if messages %}
-{% for message in messages %}
-<div class="alert alert-info" role="alert">
-    <p style="font-size: larger;">{{ message }}</p>
-</div>
-{% endfor %}
-{% endif %}
-
-
-<div class="home">
-    <!-- fade css -->
-    <div class="content fade" style="display: block;">
-        <div class="txt">
-            <h1>WE FEED POOR PEOPLE, SERVE MEDICAL CARE, VOLUNTEER FOR SOCIETY</h1>
-            <p>We are society driven Foundation build to create impact in the society and help poor people,we donate
-                to poor people.</p>
-        </div>
-        <img src="{% static 'Images/img1.jpg' %}" style="width: 100%; height: 100%;">
-    </div>
-
-    <div class="content fade">
-        <div class="txt">
-            <h1>EMPOWER COMMUNITIES BY PROVIDE EDUCATION FOR UNDERPRIVILEGED CHILDREN</h1>
-            <p>We are continously workjng on generating more donations, which we will use for providing food for
-                people in need, animals medicine etc.</p>
-        </div>
-        <img src="{% static 'Images/img2.jpg' %} " style="width: 100%; height: 100%;">
-    </div>
-
-    <div class="content fade">
-        <div class="txt">
-            <h1>WE RESCUE ANIMALS AND ADVOCATE FOR THEIR WELL-BEING</h1>
-            <p>We rescue abandoned and mistreated animals, provide essential medical care and rehabilitation, and
-                advocate for their well-being, ensuring they find safe, loving homes and a better quality of life.
-            </p>
-        </div>
-        <img src="{% static 'Images/img3.jpg' %} " style="width: 100%; height: 100%;">
-    </div>
-
-    <!-- onclick js -->
-    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-    <a class="next" onclick="plusSlides(1)">&#10095;</a>
-
-    <div class="dotsbox" style="text-align:center">
-        <span class="dot" onclick="currentSlide(1)"></span>
-        <span class="dot" onclick="currentSlide(2)"></span>
-        <span class="dot" onclick="currentSlide(3)"></span>
-    </div>
-    <!-- /onclick js -->
-</div>
 
 <!--------------- Quick Link ----------------------->
-<div class="quick-link">
-    <h1 class="heading">Quick Links</h1>
-    <div class="box-container">
-        <div class="box">
-            <i class="fa-solid fa-people-group"></i>
-            <h3>Become A Volunteer</h3>
-            <p>Join us as a volunteer and give yourself a chance to get blessings.</p>
-            <a href="{% url 'volunteer_panel' %}" class="btn">Join Us</a>
-        </div>
-        <div class="box">
-            <i class="fa-solid fa-handshake"></i>
-            <h3>Become A Partner</h3>
-            <p>Become a partner and take responsibility to work for humankind.</p>
-            <a href="{{ data.become_a_partner_link }}" class="btn">Join Us</a>
-        </div>
-        <div class="box">
-            <i class="fa-solid fa-hand-holding-dollar"></i>
-            <h3>Donate To Support</h3>
-            <p>Your one donation can feed someone’s daily meal, show some kindness.</p>
-            <a href="{{ data.donate_to_support_link }}" class="btn">Donate Now</a>
-        </div>
-        <div class="box">
-            <i class="fa-solid fa-address-card"></i>
-            <h3>Generate ID Card</h3>
-            <p>By joining us, create id card for your identity as a ngo employee.</p>
-            <a href="{% url 'id_card' %}" class="btn">Create</a>
+
+  <section class="bg-gray-100 py-16">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">Quick Links</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Volunteer Card -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105">
+                <div class="p-6">
+                    <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mb-6 mx-auto">
+                        <i class="fas fa-people-group text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3 text-center">Become A Volunteer</h3>
+                    <p class="text-gray-600 mb-6 text-center">Join us as a volunteer and give yourself a chance to get blessings.</p>
+                    <a href="{% url 'volunteer_panel' %}" class="block w-full bg-yellow-500 text-black font-bold py-3 px-4 rounded-full text-center hover:bg-yellow-400 transition duration-300">Join Us</a>
+                </div>
+            </div>
+
+            <!-- Partner Card -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105">
+                <div class="p-6">
+                    <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mb-6 mx-auto">
+                        <i class="fas fa-handshake text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3 text-center">Become A Partner</h3>
+                    <p class="text-gray-600 mb-6 text-center">Become a partner and take responsibility to work for humankind.</p>
+                    <a href="{{ data.become_a_partner_link }}" class="block w-full bg-yellow-500 text-black font-bold py-3 px-4 rounded-full text-center hover:bg-yellow-400 transition duration-300">Join Us</a>
+                </div>
+            </div>
+
+            <!-- Donate Card -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105">
+                <div class="p-6">
+                    <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mb-6 mx-auto">
+                        <i class="fas fa-hand-holding-dollar text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3 text-center">Donate To Support</h3>
+                    <p class="text-gray-600 mb-6 text-center">Your one donation can feed someone's daily meal, show some kindness.</p>
+                    <a href="{{ data.donate_to_support_link }}" class="block w-full bg-yellow-500 text-black font-bold py-3 px-4 rounded-full text-center hover:bg-yellow-400 transition duration-300">Donate Now</a>
+                </div>
+            </div>
+
+            <!-- ID Card Generation Card -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105">
+                <div class="p-6">
+                    <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mb-6 mx-auto">
+                        <i class="fas fa-address-card text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3 text-center">Generate ID Card</h3>
+                    <p class="text-gray-600 mb-6 text-center">By joining us, create id card for your identity as a ngo employee.</p>
+                    <a href="{% url 'id_card' %}" class="block w-full bg-yellow-500 text-black font-bold py-3 px-4 rounded-full text-center hover:bg-yellow-400 transition duration-300">Create</a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</section>
 
 <!--------------- About Us ----------------------->
-<div class="about-us">
-    <h3>ABOUT US</h3>
-    <h1>Our Work Promise To Uphold The Trust Placed</h1>
-    <p>Our organization, founded with a deep commitment to serving humanity, strives to make a lasting impact in
-        various sectors, including health, medical care, education, environment, and empowerment of women and youth.
-        We help to poor and needy people's. The emerging India Foundation work without government funding.</p>
-    <div class="about-us-logo"><img src="{% static 'Images/Logo.png' %}"></div>
-    <a href="{{ data.about_us_link}}" class="btn">Learn More</a>
-</div>
+
+  <section class="about-us  bg-gradient-to-r from-red-500 via-yellow-400 to-white py-16 md:py-24">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center">
+            <!-- Text Content -->
+            <div class="md:w-1/2 md:pr-8 mb-8 md:mb-0">
+                <h3 class="text-red-600 font-semibold text-lg mb-2 uppercase tracking-wider">ABOUT US</h3>
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6 leading-tight">Our Work Promise To Uphold The Trust Placed</h1>
+                <p class="text-gray-600 mb-8 leading-relaxed">
+                    Our organization, founded with a deep commitment to serving humanity, strives to make a lasting impact in
+                    various sectors, including health, medical care, education, environment, and empowerment of women and youth.
+                    We help poor and needy people. The Emerging India Foundation works without government funding.
+                </p>
+                <a href="{{ data.about_us_link }}" class="inline-block bg-yellow-500 text-black font-bold py-3 px-8 rounded-full hover:bg-yellow-400 transition duration-300 transform hover:scale-105">
+                    Learn More
+                </a>
+            </div>
+            
+            <!-- Logo and Image -->
+            <div class="md:w-2/3 flex pl-40 justify-center items-center">
+                <div class="relative">
+                    <div class="w-64 h-64 md:w-80 md:h-80 bg-white rounded-full flex items-center justify-center overflow-hidden rounded-lg">
+                        <img src="{% static 'Images/Logo.png' %}" alt="The Emerging India Foundation Logo" class="w-3/4 h-3/4 object-contain">
+                    </div>
+                    <div class="absolute -bottom-4 -right-4 w-24 h-24 bg-yellow-400 rounded-full flex items-center justify-center">
+                        <span class="text-black font-bold text-lg">Est. 2004</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-------------------------- Goal Part------------------->
-<div class="goals-part">
-    <h1 class="goals-heading">The Emerging India Foundation's Goals</h1>
-    <div class="goals-container">
-        <div class="box">
-            <i class="fa-solid fa-laptop-medical"></i>
-            <h3>Health Empowerment</h3>
-        </div>
-        <div class="box">
-            <i class="fa-solid fa-users-line"></i>
-            <h3>Community Development</h3>
-        </div>
-        <div class="box">
-            <i class="fa-solid fa-children"></i>
-            <h3>Youth Empowerment</h3>
-        </div>
-        <div class="box">
-            <i class="fa-solid fa-hippo"></i>
-            <h3>Animal Welfare</h3>
-        </div>
-        <div class="box">
-            <i class="fa-solid fa-seedling"></i>
-            <h3>Environmental Conservation</h3>
-        </div>
-        <div class="box">
-            <i class="fa-solid fa-user-shield"></i>
-            <h3>Human Rights Advocacy</h3>
-        </div>
-    </div>
-    <div class="goals-content">
-        <p class="cont"><b>Health Improvement:</b> Enhancing healthcare access and quality, addressing health issues
-            such as disease prevention, maternal and child health, and mental health support.</p>
-        <p class="cont"><b>Community Development:</b> Supporting community-led initiatives to improve
-            infrastructure, economic opportunities, and social cohesion.</p>
-        <p class="cont"><b>Youth Empowerment:</b> Engaging and empowering young people through education, leadership
-            training, and opportunities for civic engagement.</p>
-        <p class="cont"><b>Animal Welfare:</b> Protecting animal rights, promoting humane treatment, and supporting
-            conservation efforts for endangered species.</p>
-        <p class="cont"><b>Environmental Conservation:</b> Protecting the environment through conservation efforts,
-            sustainable practices, and raising awareness about environmental issues.</p>
-        <p class="cont"><b>Human Rights Advocacy:</b> Promoting and protecting human rights, fighting against
-            discrimination, and ensuring that all individuals have access to basic freedoms and rights.</p>
-    </div>
+<section class="goals-part bg-white py-16 md:py-24">
+    <div class="container mx-auto px-4">
+       <h2 class="goals-heading text-2xl md:text-3xl lg:text-4xl font-extrabold text-center text-black mb-12 uppercase drop-shadow-lg">
+    The Emerging India Foundation's Goals
+</h2>
+ 
+       <div class="goals-container grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-6 mb-12">
+    <a href="#" class="box bg-red-700 rounded-lg shadow-lg p-6 text-center transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl">
+        <i class="fa-solid fa-laptop-medical text-4xl text-yellow-400 mb-4"></i>
+        <h3 class="text-lg font-semibold text-white">Health Empowerment</h3>
+    </a>
+    <a href="#" class="box bg-red-700 rounded-lg shadow-lg p-6 text-center transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl">
+        <i class="fa-solid fa-users-line text-4xl text-yellow-400 mb-4"></i>
+        <h3 class="text-lg font-semibold text-white">Community Development</h3>
+    </a>
+    <a href="#" class="box bg-red-700 rounded-lg shadow-lg p-6 text-center transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl">
+        <i class="fa-solid fa-children text-4xl text-yellow-400 mb-4"></i>
+        <h3 class="text-lg font-semibold text-white">Youth Empowerment</h3>
+    </a>
+    <a href="#" class="box bg-red-700 rounded-lg shadow-lg p-6 text-center transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl">
+        <i class="fa-solid fa-hippo text-4xl text-yellow-400 mb-4"></i>
+        <h3 class="text-lg font-semibold text-white">Animal Welfare</h3>
+    </a>
+    <a href="#" class="box bg-red-700 rounded-lg shadow-lg p-6 text-center transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl">
+        <i class="fa-solid fa-seedling text-4xl text-yellow-400 mb-4"></i>
+        <h3 class="text-lg font-semibold text-white">Environmental Conservation</h3>
+    </a>
+    <a href="#" class="box bg-red-700 rounded-lg shadow-lg p-6 text-center transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl">
+        <i class="fa-solid fa-user-shield text-4xl text-yellow-400 mb-4"></i>
+        <h3 class="text-lg font-semibold text-white">Human Rights Advocacy</h3>
+    </a>
 </div>
+
+{% comment %} <div class="container mx-auto px-7 py-10">
+    <h1 class="text-center text-4xl font-bold text-red-600 mb-6 animate__animated animate__fadeInUp">Our Core Goals</h1>
+
+    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        <!-- Goal Item 0 -->
+        <div class="goal-item p-7 bg-yellow-100 rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300 ease-in-out animate__animated animate__fadeInUp">
+            <p class="text-xl font-semibold text-red-601 mb-3">Health Improvement</p>
+            <p class="text-gray-701 leading-relaxed">Enhancing healthcare access and quality, addressing health issues such as disease prevention, maternal and child health, and mental health support.</p>
+        </div>
+
+        <!-- Goal Item 1 -->
+        <div class="goal-item p-7 bg-yellow-100 rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300 ease-in-out animate__animated animate__fadeInUp">
+            <p class="text-xl font-semibold text-red-601 mb-3">Community Development</p>
+            <p class="text-gray-701 leading-relaxed">Supporting community-led initiatives to improve infrastructure, economic opportunities, and social cohesion.</p>
+        </div>
+
+        <!-- Goal Item 2 -->
+        <div class="goal-item p-7 bg-yellow-100 rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300 ease-in-out animate__animated animate__fadeInUp">
+            <p class="text-xl font-semibold text-red-601 mb-3">Youth Empowerment</p>
+            <p class="text-gray-701 leading-relaxed">Engaging and empowering young people through education, leadership training, and opportunities for civic engagement.</p>
+        </div>
+
+        <!-- Goal Item 3 -->
+        <div class="goal-item p-7 bg-yellow-100 rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300 ease-in-out animate__animated animate__fadeInUp">
+            <p class="text-xl font-semibold text-red-601 mb-3">Animal Welfare</p>
+            <p class="text-gray-701 leading-relaxed">Protecting animal rights, promoting humane treatment, and supporting conservation efforts for endangered species.</p>
+        </div>
+
+        <!-- Goal Item 4 -->
+        <div class="goal-item p-7 bg-yellow-100 rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300 ease-in-out animate__animated animate__fadeInUp">
+            <p class="text-xl font-semibold text-red-601 mb-3">Environmental Conservation</p>
+            <p class="text-gray-701 leading-relaxed">Protecting the environment through conservation efforts, sustainable practices, and raising awareness about environmental issues.</p>
+        </div>
+
+        <!-- Goal Item 5 -->
+        <div class="goal-item p-7 bg-yellow-100 rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300 ease-in-out animate__animated animate__fadeInUp">
+            <p class="text-xl font-semibold text-red-601 mb-3">Human Rights Advocacy</p>
+            <p class="text-gray-701 leading-relaxed">Promoting and protecting human rights, fighting against discrimination, and ensuring that all individuals have access to basic freedoms and rights.</p>
+        </div>
+
+    </div>
+</div> {% endcomment %}
+        
+    </div>
+</section>
 
 <!------------------------------- counter part ------------------->
-<div class="counter-container">
-    <header class="counter-heading">
-        <h1>IN COLLABORATION WITH PIRAMAL FOUNDATION
-        </h1>
-    </header>
+<div class="bg-white text-gray-900">
 
-    <div class="counters">
-        <div class="counter-wrapper">
-            <div class="counter-info">
-                <h1 class="counter" data-count="{{data.people_got_clothes}}">0</h1>
-                <p>PEOPLE GOT CLOTHES</p>
+    <!-- Section Start -->
+    <section class="py-12 px-6 bg-gradient-to-r from-red-500 via-yellow-500 to-red-500 text-white" id="counter-section">
+        <div class="max-w-7xl mx-auto text-center">
+           <header class="mb-8">
+    <h1 class="text-4xl font-bold text-black tracking-wide" style="text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);">
+        IN COLLABORATION WITH PIRAMAL FOUNDATION
+    </h1>
+</header>
+ 
+
+            <!-- Counter Grid Section -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Counter 1: People Got Clothes -->
+                <div class="counter-wrapper p-6 bg-white text-red-500 shadow-lg rounded-lg hover:bg-red-100 transition-transform transform duration-300 ease-in-out hover:scale-105">
+                    <div class="counter-info text-center">
+                        <h1 class="counter text-4xl font-bold" data-count="{{ data.people_got_clothes }}" style="animation: countUp 1s ease-out;">
+                            0
+                        </h1>
+                        <p class="mt-2 text-lg font-semibold text-red-600">PEOPLE GOT CLOTHES</p>
+                    </div>
+                </div>
+
+                <!-- Counter 2: Handicaps Got Help -->
+                <div class="counter-wrapper p-6 bg-white text-yellow-500 shadow-lg rounded-lg hover:bg-yellow-100 transition-transform transform duration-300 ease-in-out hover:scale-105">
+                    <div class="counter-info text-center">
+                        <h1 class="counter text-4xl font-bold" data-count="{{ data.handicaps_got_help }}" style="animation: countUp 1s ease-out;">
+                            0
+                        </h1>
+                        <p class="mt-2 text-lg font-semibold text-yellow-600">HANDICAPS GOT HELP</p>
+                    </div>
+                </div>
+
+                <!-- Counter 3: People Got Medical Help -->
+                <div class="counter-wrapper p-6 bg-white text-red-500 shadow-lg rounded-lg hover:bg-red-100 transition-transform transform duration-300 ease-in-out hover:scale-105">
+                    <div class="counter-info text-center">
+                        <h1 class="counter text-4xl font-bold" data-count="{{ data.people_got_medical_help }}" style="animation: countUp 1s ease-out;">
+                            0
+                        </h1>
+                        <p class="mt-2 text-lg font-semibold text-red-600">PEOPLE GOT MEDICAL HELP</p>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="counter-wrapper">
-            <div class="counter-info">
-                <h1 class="counter" data-count="{{data.handicaps_got_help}}">0</h1>
-                <p>HANDICAPS GOT HELP</p>
-            </div>
-        </div>
-        <div class="counter-wrapper">
-            <div class="counter-info">
-                <h1 class="counter" data-count="{{data.people_got_medical_help}}">0</h1>
-                <p>PEOPLE GOT MEDICAL HELP</p>
-            </div>
-        </div>
-    </div>
+    </section>
+    <!-- Section End -->
+
+    <!-- Lazy Load Script -->
+    <script>
+        // Detect when the section is in the viewport and trigger lazy loading
+        const section = document.getElementById('counter-section');
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Start animating counters when section is in view
+                    animateCounters();
+                    observer.unobserve(entry.target);  // Stop observing after animation starts
+                }
+            });
+        }, {
+            threshold: 0.5  // Trigger when at least 50% of the section is in view
+        });
+
+        observer.observe(section);
+
+        // jQuery to animate the counters when they come into view
+        function animateCounters() {
+            document.querySelectorAll('.counter').forEach((counter) => {
+                let countTo = counter.getAttribute('data-count');
+                let currentCount = 0;
+                const increment = Math.ceil(countTo / 100); // Increment per step
+
+                const interval = setInterval(() => {
+                    currentCount += increment;
+                    counter.textContent = currentCount;
+                    if (currentCount >= countTo) {
+                        clearInterval(interval);
+                        counter.textContent = countTo+"+"; // Ensure it ends on the final number
+                    }
+                }, 20);
+            });
+        }
+    </script>
+
 </div>
+    <style>
+        /* Custom styles for the smooth counter text transition */
+        @keyframes countUp {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
 
 <!--------------------- Management Part ------------------>
-<div style="text-align: center; padding: 20px; margin-top: 100px;">
-    <h1 style="color: rgb(193, 27, 27); font-family: 'Poppins', sans-serif; margin-bottom: 30px;">
+<div class="text-center py-20 mt-24">
+    <h1 class="text-4xl font-bold text-red-600 mb-10">
         OUR OPTIMISTIC MANAGEMENT TEAM
     </h1>
-    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+
+    <div class="flex flex-wrap justify-center gap-6">
         {% for member in Team_members %}
-        <div
-            style="background: #fff; padding: 20px; border: 1px solid #ddd; width: 250px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 10px;">
-            <img src="{{ member.Image.url }}" alt="{{ member.Name }}"
-                style="width: 100%; height: auto; border-radius: 10px 10px 0 0;">
-            <h2 style="color: rgb(193, 27, 27); font-family: 'Montserrat', sans-serif; margin: 15px 0 10px;">
+        <div class="bg-white p-4 border border-gray-200 rounded-lg shadow-lg max-w-xs w-full transform transition-all hover:scale-105 hover:shadow-2xl hover:border-red-600">
+            <img src="{{ member.Image.url }}" alt="{{ member.Name }}" loading="lazy" class="w-full h-48 object-cover rounded-t-lg mb-4">
+            <h2 class="text-2xl font-semibold text-red-600 mb-2">
                 {{ member.Name }}
             </h2>
-            <h4 style="color: #666; font-family: 'Montserrat', sans-serif; margin: 5px 0;">
+            <h4 class="text-xl text-gray-600 mb-1">
                 ( {{ member.Position }} )
             </h4>
-            <h5 style="color: #999; font-family: 'Montserrat', sans-serif; margin: 5px 0;">
+            <h5 class="text-gray-500 text-sm mb-4">
                 {{ member.Organization }}
             </h5>
         </div>
         {% endfor %}
     </div>
-    <div style="margin-top: 30px;">
-        <a href="{% url 'team' %}"
-            style="text-decoration: none; color: #fff; background: rgb(193, 27, 27); padding: 10px 20px; border-radius: 5px; font-family: 'Montserrat', sans-serif;">
+
+    <div class="mt-8">
+        <a href="{% url 'team' %}" class="inline-block text-white bg-red-600 hover:bg-yellow-500 py-2 px-6 rounded-md text-lg font-semibold transition duration-300 ease-in-out transform hover:scale-105">
             See Full Management Body
         </a>
     </div>
 </div>
 
-
-<!-- -------------------------Slider gallery Part------------------->
-<div style="text-align: center; padding: 20px; margin-top: 100px;">
-    <h2 style="color: rgb(193, 27, 27); font-family: 'Poppins', sans-serif; font-size: 40px;">OUR GALLERY</h2>
+  <!-- Gallery Section -->
+<div class="text-center py-8 mt-16">
+    <h2 class="text-4xl font-semibold text-red-600 font-poppins mb-4">OUR GALLERY</h2>
 </div>
-<div class="gallery-wrap" style="margin-bottom: 0px;">
-    <img src="{% static 'Images/back.png' %} " id="backBtn">
-    <div class="gallery">
-        <div>
-            {% for image in gallery_3 %}
-            <span><img src="{{image.url}} "></span>
-            {% endfor %}
-        </div>
-        <div>
-            {% for image in gallery_6 %}
-            <span><img src="{{image.url}} "></span>
+
+<!-- Gallery Carousel -->
+<div class="relative overflow-hidden">
+    <!-- Navigation Buttons -->
+    <div class="absolute top-1/2 left-0 transform -translate-y-1/2 z-10">
+        <img src="{% static 'Images/back.png' %}" id="backBtn" class="w-8 cursor-pointer transition-transform hover:scale-105">
+    </div>
+    <div class="absolute top-1/2 right-0 transform -translate-y-1/2 z-10">
+        <img src="{% static 'Images/next.png' %}" id="nextBtn" class="w-8 cursor-pointer transition-transform hover:scale-105">
+    </div>
+
+    <!-- Image Carousel Grid -->
+    <div id="carousel" class="carousel flex space-x-4 transition-all duration-500 ease-in-out">
+        <!-- Gallery 3 Images -->
+        <div class="carousel-images flex space-x-4">
+         {% for image in carousel_images %}
+                <div class="group relative w-60 h-60 bg-cover bg-center rounded-xl overflow-hidden cursor-pointer transition-transform hover:scale-105" style="background-image: url('{{image.url}}');" loading="lazy">
+                    <a href="{% url 'gallery:gallery' 'all' %}" target="_blank" class="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 bg-black bg-opacity-40 flex items-center justify-center text-white text-lg font-semibold transition-opacity ">
+                        View Full Gallery
+                    </a>
+                </div>
             {% endfor %}
         </div>
     </div>
-    <img src="{% static 'Images/next.png' %}" id="nextBtn">
 </div>
-<div style="display: flex; justify-content: center; margin-top: 10px; padding: 0px;">
-    <a href="{% url 'gallery:gallery' 'all' %}"
-        style="text-decoration: none; color: #fff; background: rgb(193, 27, 27); padding: 10px 20px; border-radius: 5px; font-family: 'Montserrat', sans-serif; margin-top: 0px;">
+
+<!-- Full Gallery Button -->
+<div class="flex justify-center mt-6 mb-6">
+    <a href="{% url 'gallery:gallery' 'all' %}" class="bg-red-600 text-white py-3 px-6 rounded-md text-lg font-montserrat hover:bg-yellow-400 transition-colors">
         See Full Gallery
     </a>
 </div>
-</div>
+
+<!-- JavaScript for Carousel -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const carousel = document.getElementById('carousel');
+    const images = document.querySelectorAll('.carousel-images');
+    const imageWidth = images[0].offsetWidth + 16; // 16px is the space-x-4 gap
+    let currentOffset = 0;
+    let autoScrollInterval;
+
+    const startAutoScroll = () => {
+        autoScrollInterval = setInterval(() => {
+            currentOffset -= 5; // Adjust the speed by changing this value
+            carousel.style.transform = `translateX(${currentOffset}px)`;
+
+            // Reset the position to create the infinite effect
+            if (-currentOffset >= imageWidth * images.length) {
+                currentOffset = 0;
+            }
+        }, 20); // Adjust the smoothness by changing this value
+    };
+
+    const stopAutoScroll = () => {
+        clearInterval(autoScrollInterval);
+    };
+
+    // Start auto-scroll on load
+    startAutoScroll();
+
+    // Pause auto-scroll on hover
+    carousel.addEventListener('mouseenter', stopAutoScroll);
+    carousel.addEventListener('mouseleave', startAutoScroll);
+
+    // Event listeners for navigation buttons
+    document.getElementById('nextBtn').addEventListener('click', () => {
+        currentOffset -= imageWidth;
+        if (-currentOffset >= imageWidth * images.length) {
+            currentOffset = 0;
+        }
+        carousel.style.transform = `translateX(${currentOffset}px)`;
+    });
+
+    document.getElementById('backBtn').addEventListener('click', () => {
+        currentOffset += imageWidth;
+        if (currentOffset > 0) {
+            currentOffset = -imageWidth * (images.length - 1);
+        }
+        carousel.style.transform = `translateX(${currentOffset}px)`;
+    });
+});
+</script>
+
+
 {% endblock content %}

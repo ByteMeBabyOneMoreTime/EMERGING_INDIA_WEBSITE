@@ -1,134 +1,128 @@
 {% extends "template.html" %}
-
-{% block style %}
-
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 0;
-    }
-
-    .profile-container {
-        min-height: 65vh;
-        padding: 20px;
-        background-color: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        max-width: 800px;
-        margin: 20px auto;
-        box-sizing: border-box;
-    }
-
-    .profile-container legend {
-        font-size: 1.5em;
-        color: rgb(193, 27, 27);
-        margin-bottom: 20px;
-        border-bottom: 2px solid rgb(193, 27, 27);
-        padding-bottom: 10px;
-    }
-
-    .profile-container img {
-        width: 150px;
-        height: 150px;
-        object-fit: cover;
-        border-radius: 50%;
-        margin-bottom: 20px;
-    }
-
-    .profile-container h2 {
-        font-size: 1.8em;
-        margin: 0;
-        color: rgb(193, 27, 27);
-    }
-
-    .profile-container h2 small {
-        font-size: 0.9em;
-        color: #555;
-    }
-
-    .profile-container p {
-        font-size: 1.1em;
-        margin: 5px 0;
-        color: #333;
-    }
-
-    .edit-link {
-        display: inline-block;
-        margin-top: 20px;
-        padding: 10px 20px;
-        background-color: rgb(193, 27, 27);
-        color: #fff;
-        text-decoration: none;
-        border-radius: 5px;
-        font-size: 1.1em;
-        transition: background-color 0.3s;
-    }
-
-    .edit-link:hover {
-        background-color: rgb(155, 22, 22);
-    }
-</style>
-{% endblock style %}
-
-
 {% block content %}
-<div class="profile-container">
-    <legend>Profile Information:</legend>
-    <div style="display: flex; justify-content: space-around;">
-        <div>
-            <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="profile-info">
-                    <img src="{{ form.instance.profile_picture.url }}" alt="Profile Picture">
-                    <div class="profile-details">
-                        <h2>{{ form.instance.username }}
-                            <small>({{ form.instance.status }})</small>
-                        </h2>
-                        <p>{{ form.instance.first_name }} {{ form.instance.last_name }}</p>
-                        <p>{{ form.instance.email }}</p>
-                    </div>
-                </div>
-            </form>
-            {% if user.username == form.instance.username %}
-            <a href="{% url 'update_profile' %}" class="edit-link">Edit Details</a>
-            {% endif %}
-            {% if user.username == form.instance.username and user.email_status == False %}
-            
-            <form method="post" action="{% url 'email_verif' %}">
-                {% csrf_token %}
-                <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; cursor: pointer;">
-                    Verify Email
-                  </button>    
-            </form>
-            {% endif %}
-        </div>
-        <div>
-            {% if volunteer %}
-            <p>Volunteer Status :
-                {% if volunteer.status == 'Uploaded' %}
-                <span style="color: red; font-weight: 800;">{{ volunteer.status }}</span>
-                {% else %}
-                <span style="color: green;font-weight: 800;">{{ volunteer.status }}</span>
-                {% endif %}
-            </p>
-            <p><a href="{% url 'joining' %}">Download Joining letter</a></p>
-            {% endif %}
-                        
-            {% if certificates %}
-            <hr>
-            <h3 style="text-align: center; margin-top: 30px;">Certificates</h3>
-            {% for x in certificates %}
-            <div style="display: list-item; align-items: center; justify-content: center; text-align: center;">
-                <p>{{x.Date}}<a style="color: blue; margin-left: 10px; font-size: large;"
-                        href="{% url 'certificates:generate' x.id %}">Download</a></p>
-            </div>
-            {% endfor %}
-            {% endif %}
-        </div>
-
+  <div class="bg-gray-100 antialiased">
+    <!-- Loading Spinner with Enhanced Design -->
+<div id="loading" class="fixed inset-0 z-50 bg-white dark:bg-gray-900 flex items-center justify-center">
+    <div class="flex flex-col items-center">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-red-600 mb-4"></div>
+        <p class="text-gray-600 dark:text-gray-300">Profile Loading...</p>
     </div>
 </div>
 
+
+
+    <div class="container mx-auto px-4 py-8 min-h-screen">
+        <div class="bg-white max-w-5xl mx-auto rounded-2xl shadow-2xl overflow-hidden">
+            <!-- Header Section -->
+            <div class="bg-gradient-to-r from-[rgb(193,27,27)] to-[rgb(155,22,22)] text-white p-6">
+                <div class="flex justify-between items-center">
+                    <h1 class="text-3xl font-bold tracking-wide">Profile Dashboard</h1>
+                    <div class="flex space-x-4">
+                        <button class="bg-white/20 hover:bg-white/30 transition-all duration-300 rounded-full p-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            </svg>
+                        </button>
+                        <button class="bg-white/20 hover:bg-white/30 transition-all duration-300 rounded-full p-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Content -->
+            <div class="grid md:grid-cols-2 gap-8 p-8">
+                <!-- Left Column - Profile Details -->
+                <div class="flex flex-col items-center">
+                    <div class="relative mb-6">
+                        <img src="{{ form.instance.profile_picture.url }}" 
+                             alt="Profile Picture" 
+                             class="w-48 h-48 rounded-full object-cover border-4 border-[rgb(193,27,27)] shadow-lg transform transition-transform duration-300 hover:scale-105">
+                        <button class="absolute bottom-2 right-2 bg-[rgb(193,27,27)] text-white rounded-full p-2 shadow-lg hover:bg-[rgb(155,22,22)] transition-all duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.414-1.414A1 1 0 0011.586 3H8.414a1 1 0 00-.707.293L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div class="text-center">
+                        <h2 class="text-2xl font-bold text-[rgb(193,27,27)]">
+                            {{ form.instance.username }}
+                            <small class="text-sm text-gray-500 ml-2">({{ form.instance.status }})</small>
+                        </h2>
+                        <p class="text-lg text-gray-700 mt-2">{{ form.instance.first_name }} {{ form.instance.last_name }}</p>
+                        <p class="text-gray-600">{{ form.instance.email }}</p>
+                    </div>
+
+                    {% if user.username == form.instance.username %}
+                    <div class="mt-6 space-x-4">
+                        <a href="{% url 'update_profile' %}" 
+                           class="inline-block px-6 py-3 bg-[rgb(193,27,27)] text-white rounded-lg hover:bg-[rgb(155,22,22)] transition-all duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-xl">
+                            Edit Profile
+                        </a>
+
+                        {% if user.email_status == False %}
+                        <form method="post" action="{% url 'email_verif' %}" class="inline-block">
+                            {% csrf_token %}
+                            <button type="submit" 
+                                    class="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-xl">
+                                Verify Email
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Right Column - Additional Information -->
+                <div class="space-y-6">
+                    {% if volunteer %}
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
+                        <h3 class="text-xl font-semibold mb-4 text-[rgb(193,27,27)]">Volunteer Information</h3>
+                        <div class="flex justify-between items-center">
+                            <p class="text-lg">
+                                Status: 
+                                <span class="font-bold {% if volunteer.status == 'Uploaded' %}text-red-600{% else %}text-green-600{% endif %}">
+                                    {{ volunteer.status }}
+                                </span>
+                            </p>
+                            <a href="{% url 'joining' %}" 
+                               class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all duration-300 transform hover:-translate-y-1 shadow-md">
+                                Joining Letter
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if certificates %}
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
+                        <h3 class="text-xl font-semibold text-center mb-4 text-[rgb(193,27,27)]">Certificates</h3>
+                        <div class="space-y-4">
+                            {% for cert in certificates %}
+                            <div class="flex justify-between items-center pb-4 border-b border-gray-200 last:border-b-0 hover:bg-gray-100 transition-all duration-300 rounded-lg p-2">
+                                <span class="text-gray-700">{{ cert.Date }}</span>
+                                <a href="{% url 'certificates:generate' cert.id %}" 
+                                   class="text-blue-500 hover:text-blue-700 hover:underline transition-all duration-300">
+                                    Download
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Remove loading spinner after page load
+        window.addEventListener('load', function() {
+            document.getElementById('loading').classList.add('hidden');
+        });
+    </script>
+</div>
 {% endblock content %}
+

@@ -1,285 +1,232 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{% static 'logo.png' %}" type="image/png">
-    <title>Register</title>
-    <style>
-        /* Basic reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f4f8;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #333;
-        }
-
-        .container {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 90%;
-            padding: 40px;
-            position: relative;
-            overflow-y: auto;
-            /* Allows vertical scrolling */
-            max-height: 90vh;
-            /* Set a maximum height for the container */
-        }
-
-
-        h2 {
-            color: #c11b1b;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-
-        /* Alert container styles */
-        .alert-container {
-            max-height: 150px;
-            /* Maximum height for the alert container */
-            overflow-y: auto;
-            /* Scroll when overflow occurs */
-            margin-bottom: 20px;
-            /* Margin between alerts and other content */
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-            background-color: #f9f9f9;
-        }
-
-        .alert {
-            padding: 15px;
-            margin: 10px 0;
-            /* Margin between alerts */
-            border-radius: 5px;
-            color: rgb(255, 0, 0);
-            display: block;
-            /* Show alerts by default */
-        }
-
-        .alert-info {
-            background-color: #d1ecf1;
-            color: #0c5460;
-            border-color: #bee5eb;
-            text-align: center;
-        }
-
-        .alert-danger {
-            background-color: #c82333;
-            text-align: center;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-control {
-            padding: 12px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            transition: border-color 0.3s;
-        }
-
-        .form-control:focus {
-            border-color: #c11b1b;
-            outline: none;
-        }
-
-        .file-upload {
-            display: none;
-        }
-
-        .file-upload-label {
-            display: inline-block;
-            background-color: #c11b1b;
-            color: #ffffff;
-            padding: 12px;
-            border-radius: 5px;
-            text-align: center;
-            cursor: pointer;
-            margin-bottom: 10px;
-            transition: background-color 0.3s;
-        }
-
-        .file-upload-label:hover {
-            background-color: #a31313;
-        }
-
-        .file-name {
-            margin-top: 5px;
-            color: #555;
-            font-size: 14px;
-            text-align: center;
-        }
-
-        .btn-submit {
-            background-color: #c11b1b;
-            color: #ffffff;
-            border: none;
-            padding: 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-            margin-top: 20px;
-            /* More space before the button */
-        }
-
-        .btn-submit:hover {
-            background-color: #a31313;
-        }
-
-        .captcha-container {
-            margin: 20px 0;
-            display: flex;
-            justify-content: center;
-        }
-
-        .rules {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 20px 0;
-            font-size: 14px;
-            color: #555;
-            line-height: 1.5;
-        }
-
-        .rules h3 {
-            margin-bottom: 10px;
-            font-size: 16px;
-            color: #c11b1b;
-        }
-
-        .password-field {
-            position: relative;
-            margin-bottom: 15px;
-        }
-
-        .password-field input[type="checkbox"] {
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-        }
-
-        @media (max-width: 480px) {
-            h2 {
-                font-size: 20px;
-            }
-
-            .btn-submit {
-                font-size: 14px;
-            }
-
-            .rules {
-                font-size: 12px;
-            }
-        }
-    </style>
+    <title>Create Your Account</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<body class="bg-gradient-to-br from-gray-100 to-gray-200 min-h-screen flex items-center justify-center p-4">
+    <!-- Loading Spinner with Enhanced Design -->
+<div id="loading" class="fixed inset-0 z-50 bg-white dark:bg-gray-900 flex items-center justify-center">
+    <div class="flex flex-col items-center">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-red-600 mb-4"></div>
+        <p class="text-gray-600 dark:text-gray-300">Loading Register...</p>
+    </div>
+</div>
 
-<body>
-    <div class="container">
-        <h2>Register</h2>
 
-        <!-- Alert container -->
-        <div class="alert-container">
-            <!-- Display Django messages -->
-            {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-            {% endfor %}
-            {% endif %}
+
+    <div class="w-full max-w-5xl mx-auto">
+        <div class="bg-white shadow-2xl rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.01]">
+            <!-- Header Section -->
+            <div class="bg-[#c11b1b] text-white text-center py-8 relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-[#c11b1b] to-[#a31313] opacity-90"></div>
+                <h2 class="text-4xl font-bold tracking-wide relative z-10 transform transition-transform hover:scale-105">
+                    Create Your Account
+                </h2>
+                <p class="mt-2 text-white/80 relative z-10">Join our community and unlock amazing features!</p>
+            </div>
+
+         <!-- Django Messages -->
+                            {% if messages %}
+                            <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded-xl relative" role="alert">
+                                {% for message in messages %}
+                                    <p>{{ message }}</p>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+
+
+            <!-- Form Container -->
+            <div class="p-6 md:p-10">
+                <form method="POST" enctype="multipart/form-data" class="space-y-6">
+                    {% csrf_token %}
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <!-- Left Side: Profile Picture Upload -->
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Profile Picture</label>
+                                <div class="relative w-full h-64 border-2 border-dashed rounded-xl cursor-pointer group overflow-hidden">
+                                    <input type="file" id="profile-upload" name="profile_picture" 
+                                           class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer" 
+                                           accept="image/*" onchange="previewProfilePicture(this)">
+                                    
+                                    <div class="absolute inset-0 bg-gray-100 flex flex-col items-center justify-center 
+                                                transition duration-300 group-hover:bg-gray-200">
+                                        <svg class="w-12 h-12 text-gray-500 group-hover:text-[#c11b1b] transition duration-300" 
+                                             fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                        <p class="text-sm text-gray-600 mt-2">
+                                            <span class="font-semibold">Upload Profile Picture</span>
+                                        </p>
+                                        <p id="file-name-display" class="text-xs text-gray-500 mt-1"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Side: Profile Picture Preview -->
+                        <div class="flex items-center justify-center">
+                            <div class="w-64 h-64 bg-gray-100 rounded-full flex items-center justify-center">
+                                <img id="profile-preview" 
+                                     src="" 
+                                     alt="Profile Preview" 
+                                     class="w-full h-full object-cover rounded-full hidden">
+                                <p id="no-image-text" class="text-gray-500">No image selected</p>
+                            </div>
+                        </div>
+
+                        <!-- Rest of the form fields -->
+                        <div class="col-span-2 grid md:grid-cols-2 gap-6">
+                            <!-- Full Name -->
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                                <input type="text" name="full_name" required 
+                                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#c11b1b] transition duration-300 hover:border-[#c11b1b]">
+                            </div>
+
+                            <!-- Username/Phone -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Username/Phone Number</label>
+                                <input type="text" name="username" required 
+                                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#c11b1b] transition duration-300 hover:border-[#c11b1b]">
+                            </div>
+
+                            <!-- Email -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                <input type="email" name="email" required 
+                                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#c11b1b] transition duration-300 hover:border-[#c11b1b]">
+                            </div>
+
+                            <!-- Password Fields -->
+                            <div class="relative">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                                <div class="relative">
+                                    <input type="password" name="password1" id="password1" required 
+                                           class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl pr-12 
+                                                  focus:outline-none focus:ring-2 focus:ring-[#c11b1b] 
+                                                  transition duration-300 hover:border-[#c11b1b]">
+                                    <button type="button" onclick="togglePassword('password1')" 
+                                            class="absolute inset-y-0 right-0 px-4 text-gray-500 hover:text-[#c11b1b]">
+                                        👁️
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="relative">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                                <div class="relative">
+                                    <input type="password" name="password2" id="password2" required 
+                                           class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl pr-12 
+                                                  focus:outline-none focus:ring-2 focus:ring-[#c11b1b] 
+                                                  transition duration-300 hover:border-[#c11b1b]">
+                                    <button type="button" onclick="togglePassword('password2')" 
+                                            class="absolute inset-y-0 right-0 px-4 text-gray-500 hover:text-[#c11b1b]">
+                                        👁️
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Captcha -->
+                            <div class="col-span-2 flex justify-center">
+                                {{ form.captcha }}
+                            </div>
+
+                            <!-- Rules Section -->
+                            <div class="col-span-2 bg-gray-50 border border-gray-200 rounded-xl p-6">
+                                <h3 class="text-lg font-semibold text-[#c11b1b] mb-4">Account Creation Guidelines</h3>
+                                <ul class="space-y-2 text-sm text-gray-600 list-disc list-inside">
+                                    <li>Username must be at least 6 characters long</li>
+                                    <li>Password requires minimum 4 characters</li>
+                                    <li>Protect your account – never share credentials</li>
+                                </ul>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="col-span-2">
+                                <button type="submit" 
+                                        class="w-full bg-[#c11b1b] text-white py-4 rounded-xl 
+                                               hover:bg-[#a31313] transition duration-300 
+                                               transform hover:scale-105 shadow-lg 
+                                               hover:shadow-xl active:scale-95 
+                                               flex items-center justify-center space-x-2 group">
+                                    <span>Create Account</span>
+                                    <svg class="w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300" 
+                                         fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                              d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                    </svg>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+            <!-- Registration and Password Reset Links -->
+            <div class="text-center space-y-2 mt-4">
+              <p class="text-sm">
+                Already have an account?
+                <a href="{% url 'login' %}" 
+                  class="text-red-500 hover:underline font-semibold">
+                  Login
+                </a>
+              </p>
+            </div>
+                </form>
+            </div>
         </div>
-
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <label for="id_full_name">{{ form.full_name.label }}</label>
-            <input type="text" name="full_name" id="id_full_name" class="form-control" required>
-
-            <label for="id_username">{{ form.username.label }}/Phone Number</label>
-            <input type="text" name="username" id="id_username" class="form-control" required>
-
-            <label for="id_email">{{ form.email.label }}</label>
-            <input type="email" name="email" id="id_email" class="form-control" required>
-
-            <!-- Profile Picture Upload -->
-            <label class="file-upload-label" for="id_profile_picture">Choose Profile Picture</label>
-            <input type="file" id="id_profile_picture" name="profile_picture" class="file-upload" accept="image/*"
-                onchange="validateFileSize(this)">
-            <div class="file-name" id="file-name-display"></div> <!-- File name display -->
-
-            <div class="password-field">
-                <label for="id_password1">{{ form.password1.label }}</label>
-                <input type="password" name="password1" id="id_password1" class="form-control" required>
-                <input type="checkbox" id="show-password" onclick="togglePassword()">
-            </div>
-
-            <div class="password-field">
-                <label for="id_password2">{{ form.password2.label }}</label>
-                <input type="password" name="password2" id="id_password2" class="form-control" required>
-                <input type="checkbox" id="show-confirm-password" onclick="toggleConfirmPassword()">
-            </div>
-
-            <div class="captcha-container">
-                {{ form.captcha }} <!-- Add the CAPTCHA field -->
-            </div>
-
-            <div class="rules">
-                <h3>User ID and Password Rules</h3>
-                <ul>
-                    <li>User ID must be at least 6 characters long and can contain letters, numbers, and special
-                        characters.</li>
-                    <li>Password must be at least 4 characters long</li>
-                    <li>Do not share your details with anyone else</li>
-                </ul>
-            </div>
-
-            <button type="submit" class="btn-submit">SIGN UP</button>
-        </form>
     </div>
 
     <script>
-        function validateFileSize(input) {
-            const file = input.files[0];
-            if (file && file.size > 200 * 1024) { // 200 KB limit
-                alert("File size must be less than 200KB");
-                input.value = ""; // Clear the file input
-                document.getElementById('file-name-display').innerText = ""; // Clear the displayed file name
-            } else {
-                document.getElementById('file-name-display').innerText = file ? file.name : "";
-            }
-        }
-
-        function togglePassword() {
-            const passwordField = document.querySelector('#id_password1');
+        function togglePassword(fieldId) {
+            const passwordField = document.getElementById(fieldId);
             passwordField.type = passwordField.type === 'password' ? 'text' : 'password';
         }
 
-        function toggleConfirmPassword() {
-            const confirmPasswordField = document.querySelector('#id_password2');
-            confirmPasswordField.type = confirmPasswordField.type === 'password' ? 'text' : 'password';
+        function previewProfilePicture(input) {
+            const fileNameDisplay = document.getElementById('file-name-display');
+            const profilePreview = document.getElementById('profile-preview');
+            const noImageText = document.getElementById('no-image-text');
+            const file = input.files[0];
+            
+            if (file) {
+                if (file.size > 200 * 1024) {
+                    alert("File size must be less than 200KB");
+                    input.value = '';
+                    fileNameDisplay.textContent = '';
+                    profilePreview.classList.add('hidden');
+                    noImageText.classList.remove('hidden');
+                } else {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        profilePreview.src = e.target.result;
+                        profilePreview.classList.remove('hidden');
+                        noImageText.classList.add('hidden');
+                    }
+                    
+                    reader.readAsDataURL(file);
+                    fileNameDisplay.textContent = file.name;
+                }
+            } else {
+                fileNameDisplay.textContent = '';
+                profilePreview.classList.add('hidden');
+                noImageText.classList.remove('hidden');
+            }
         }
+
+        // Remove loading spinner
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('opacity-0', 'pointer-events-none');
+            }, 500);
+        });
     </script>
 </body>
-
 </html>
+
