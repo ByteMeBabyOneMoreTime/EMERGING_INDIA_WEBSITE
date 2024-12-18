@@ -110,6 +110,8 @@ INSTALLED_APPS = [
     'gallery',
     'pages',
     'payments',
+    'cron',
+    # cron job page
     'jazzmin', 
     # jazzmin
     'django.contrib.admin',

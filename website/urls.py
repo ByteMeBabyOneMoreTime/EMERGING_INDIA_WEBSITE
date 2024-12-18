@@ -8,6 +8,8 @@ from . import settings
 
 urlpatterns = [
     path('admin/', admin_site.urls),
+    path('cron', include('cron.urls')),
+    # cron url
     path('', include('users.urls')),
     path('', include('Home.urls')),
     path('forms/', include('forms.urls')),
