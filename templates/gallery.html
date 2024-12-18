@@ -1,220 +1,253 @@
 {% extends "template.html" %}
 
 {% block tile %}
-
-Emerging India gallery
-
+Emerging India Gallery
 {% endblock tile %}
 
 {% block style %}
-
 <style>
-    .gallery-container {
-        width: 100%;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
+    /* Enhanced Lazy Loading Placeholder */
+    .image-placeholder {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: loading-shimmer 1.5s infinite;
     }
 
-    .masonry-container {
-        column-count: 3;
-        column-gap: 15px;
-        padding: 0;
+    @keyframes loading-shimmer {
+        0% {
+            background-position: -200% 0;
+        }
+        100% {
+            background-position: 200% 0;
+        }
     }
 
-    .masonry-item {
-        display: inline-block;
-        width: 100%;
-        margin-bottom: 15px;
-    }
-
-    .masonry-item img {
-        display: block;
-        width: 100%;
-        cursor: pointer;
-    }
-
-    .masonry-item span {
-        display: block;
-        padding: 10px;
-        text-align: center;
-    }
-
-    .masonry-item {
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-
-    /* Modal styles */
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.8);
-    }
-
-    .modal-content {
-        margin: 5% auto;
-        display: block;
-        width: 80%;
-        max-width: 700px;
-    }
-
-    .modal-content img {
-        width: 100%;
-        height: auto;
-    }
-
-    .close,
-    .prev,
-    .next {
+    /* Improved Hover Effects */
+    .gallery-item::before {
+        content: '';
         position: absolute;
-        top: 50%;
-        color: #fff;
-        font-size: 40px;
-        font-weight: bold;
-        cursor: pointer;
-        user-select: none;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0);
+        transition: background 0.3s ease;
+        z-index: 10;
     }
 
-    .close {
-        top: 20px;
-        right: 35px;
-    }
-
-    .prev {
-        left: 15px;
-    }
-
-    .next {
-        right: 15px;
-    }
-
-    .prev:hover,
-    .next:hover,
-    .close:hover {
-        color: #ddd;
-    }
-
-    /* Responsive design */
-    @media (max-width: 1200px) {
-        .masonry-container {
-            column-count: 2;
-        }
-    }
-
-    @media (max-width: 800px) {
-        .masonry-container {
-            column-count: 1;
-        }
-
-        .modal-content {
-            width: 90%;
-        }
-    }
-
-    @media (max-width: 600px) {
-
-        .close,
-        .prev,
-        .next {
-            font-size: 30px;
-        }
-
-        .gallery-container {
-            padding: 0;
-        }
+    .gallery-item:hover::before {
+        background: rgba(0,0,0,0.2);
     }
 </style>
-
 {% endblock style %}
 
 {% block content %}
-<div style="display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap;">
-    <a href="{% url 'gallery:gallery' 'all' %}"
-        style="display: inline-block; padding: 10px 20px; text-decoration: none; background-color: rgb(193, 27, 27); color: white; border-radius: 5px; transition: background-color 0.3s ease;">all
-        Images</a>
-    {% for x in categories %}
-    <a href="{% url 'gallery:gallery' x %}"
-        style="display: inline-block; padding: 10px 20px; text-decoration: none; background-color: rgb(193, 27, 27); color: white; border-radius: 5px; transition: background-color 0.3s ease;">
-        {{ x }}</a>
-    {% endfor %}
-</div>
 
-
-<div class="gallery-container">
-    <div class="masonry-container">
-        {% for image in images %}
-        <div class="masonry-item">
-            <img src="{{image.url}}" onclick="openModal(this, 0)" />
-            <span>{{image.category}}</span>
-        </div>
-        {% endfor %}
+    <!-- Loading Spinner with Enhanced Design -->
+<div id="loading" class="fixed inset-0 z-50 bg-white dark:bg-gray-900 flex items-center justify-center">
+    <div class="flex flex-col items-center">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-red-600 mb-4"></div>
+        <p class="text-gray-600 dark:text-gray-300">Loading Register...</p>
     </div>
 </div>
 
-<!-- Modal -->
-<div id="myModal" class="modal">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <span class="prev" onclick="prevImage()">&#10094;</span>
-    <span class="next" onclick="nextImage()">&#10095;</span>
-    <img class="modal-content" id="modalImage">
+
+
+<div class="bg-gradient-to-br from-slate-50 to-slate-100 dark:bg-gray-900 min-h-screen">
+    <div class="container mx-auto px-4 py-12">
+        <!-- Category Navigation -->
+        <div class="flex flex-wrap justify-center gap-4 mb-16">
+            <a href="{% url 'gallery:gallery' 'all' %}" 
+               class="px-6 py-3 bg-red-600 text-white rounded-xl shadow-md hover:bg-red-700 transition-all duration-300 transform hover:scale-105 hover:shadow-xl text-md font-medium tracking-wide dark:bg-red-700 dark:hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                All Images
+            </a>
+            {% for category in categories %}
+            <a href="{% url 'gallery:gallery' category %}" 
+               class="px-6 py-3 bg-red-600 text-white rounded-xl shadow-md hover:bg-red-700 transition-all duration-300 transform hover:scale-105 hover:shadow-xl text-md font-medium tracking-wide dark:bg-red-700 dark:hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                {{ category }}
+            </a>
+            {% endfor %}
+        </div>
+
+        <!-- Masonry Gallery Grid -->
+        <div id="galleryGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for image in images %}
+            <div class="gallery-item group relative overflow-hidden rounded-2xl shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer" 
+                 data-index="{{ forloop.counter0 }}"
+                 data-url="{{ image.url }}"
+                 data-category="{{ image.category }}">
+        <div class="relative overflow-hidden rounded-2xl">
+                    <div class="image-placeholder absolute inset-0 w-full h-64 md:h-72"></div>
+                    <img 
+                        src="{{ image.url }}" 
+                        alt="{{ image.category }}"
+                        loading="lazy"
+                        class="w-full h-64 md:h-72 object-cover transition-transform duration-300 group-hover:scale-110 opacity-0"
+                        onload="this.classList.add('opacity-100'); this.previousElementSibling.classList.add('hidden');"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 p-4 text-center">
+                    <span class="text-white font-semibold text-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {{ image.category }}
+                    </span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="imageModal" class="fixed inset-0 z-50 hidden bg-black/95 flex-col items-center justify-center">
+        <!-- Top Controls -->
+        <div class="absolute top-4 right-4 flex items-center space-x-4">
+            <!-- Zoom Controls -->
+            <div class="flex items-center bg-white/10 backdrop-blur-md rounded-full p-2">
+                <button id="zoomOutBtn" class="text-white text-xl w-10 h-10 flex items-center justify-center hover:bg-white/20 rounded-l-full transition-colors">-</button>
+                <span id="zoomPercentage" class="text-white px-3 min-w-[60px] text-center">100%</span>
+                <button id="zoomInBtn" class="text-white text-xl w-10 h-10 flex items-center justify-center hover:bg-white/20 rounded-r-full transition-colors">+</button>
+            </div>
+            
+            <!-- Close Button -->
+            <button id="closeModalBtn" class="text-white text-4xl font-light w-12 h-12 flex items-center justify-center hover:bg-white/20 rounded-full transition-colors">&times;</button>
+        </div>
+        
+        <!-- Navigation Buttons -->
+        <button id="prevModalBtn" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-md text-white p-4 rounded-full hover:bg-white/20 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+        
+        <!-- Modal Image Container -->
+        <div class="w-full h-full flex items-center justify-center overflow-auto p-8">
+            <img 
+                id="modalImage" 
+                class="max-w-full max-h-full object-contain transition-transform duration-300 ease-in-out" 
+                style="transform: scale(1);"
+            />
+        </div>
+        
+        <button id="nextModalBtn" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-md text-white p-4 rounded-full hover:bg-white/20 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Modal JavaScript -->
+    <script>
+        // Remove loading spinner after page load
+        window.addEventListener('load', function() {
+            document.getElementById('loading').classList.add('hidden');
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const zoomPercentage = document.getElementById('zoomPercentage');
+            const zoomInBtn = document.getElementById('zoomInBtn');
+            const zoomOutBtn = document.getElementById('zoomOutBtn');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const prevModalBtn = document.getElementById('prevModalBtn');
+            const nextModalBtn = document.getElementById('nextModalBtn');
+            
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            let currentImageIndex = 0;
+            let currentZoom = 1;
+
+            // Open Modal Function
+            function openModal(index) {
+                const selectedItem = galleryItems[index];
+                const imageUrl = selectedItem.dataset.url;
+                
+                modalImage.src = imageUrl;
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                currentImageIndex = index;
+                resetZoom();
+            }
+
+            // Close Modal Function
+            function closeModal() {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+                resetZoom();
+            }
+
+            // Navigate to Next Image
+            function nextImage() {
+                currentImageIndex = (currentImageIndex + 1) % galleryItems.length;
+                const nextItem = galleryItems[currentImageIndex];
+                modalImage.src = nextItem.dataset.url;
+                resetZoom();
+            }
+
+            // Navigate to Previous Image
+            function prevImage() {
+                currentImageIndex = (currentImageIndex - 1 + galleryItems.length) % galleryItems.length;
+                const prevItem = galleryItems[currentImageIndex];
+                modalImage.src = prevItem.dataset.url;
+                resetZoom();
+            }
+
+            // Zoom Functions
+            function zoomIn() {
+                currentZoom = Math.min(currentZoom * 1.2, 3);
+                updateZoom();
+            }
+
+            function zoomOut() {
+                currentZoom = Math.max(currentZoom / 1.2, 1);
+                updateZoom();
+            }
+
+            function resetZoom() {
+                currentZoom = 1;
+                updateZoom();
+            }
+
+            function updateZoom() {
+                modalImage.style.transform = `scale(${currentZoom})`;
+                zoomPercentage.textContent = `${Math.round(currentZoom * 100)}%`;
+            }
+
+            // Event Listeners
+            galleryItems.forEach((item, index) => {
+                item.addEventListener('click', () => openModal(index));
+            });
+
+            closeModalBtn.addEventListener('click', closeModal);
+            nextModalBtn.addEventListener('click', nextImage);
+            prevModalBtn.addEventListener('click', prevImage);
+            zoomInBtn.addEventListener('click', zoomIn);
+            zoomOutBtn.addEventListener('click', zoomOut);
+
+            // Keyboard Navigation
+            document.addEventListener('keydown', (e) => {
+                if (modal.classList.contains('flex')) {
+                    switch(e.key) {
+                        case 'Escape':
+                            closeModal();
+                            break;
+                        case 'ArrowRight':
+                            nextImage();
+                            break;
+                        case 'ArrowLeft':
+                            prevImage();
+                            break;
+                        case '=':
+                        case '+':
+                            zoomIn();
+                            break;
+                        case '-':
+                            zoomOut();
+                            break;
+                    }
+                }
+            });
+        });
+
+    </script>
 </div>
-
-<script>
-    let currentIndex = 0;
-    const images = [
-        {% for image in images %}
-    "{{image.url}}",
-        {% endfor %}
-        ];
-
-    function openModal(img, index) {
-        const modal = document.getElementById("myModal");
-        const modalImg = document.getElementById("modalImage");
-        modal.style.display = "block";
-        modalImg.src = img.src;
-        currentIndex = index;
-    }
-
-    function closeModal() {
-        const modal = document.getElementById("myModal");
-        modal.style.display = "none";
-    }
-
-    function showImage(index) {
-        const modalImg = document.getElementById("modalImage");
-        modalImg.src = images[index];
-    }
-
-    function prevImage() {
-        if (currentIndex > 0) {
-            currentIndex--;
-        } else {
-            currentIndex = images.length - 1;
-        }
-        showImage(currentIndex);
-    }
-
-    function nextImage() {
-        if (currentIndex < images.length - 1) {
-            currentIndex++;
-        } else {
-            currentIndex = 0;
-        }
-        showImage(currentIndex);
-    }
-
-    window.onclick = function (event) {
-        const modal = document.getElementById("myModal");
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-</script>
 {% endblock content %}
+
