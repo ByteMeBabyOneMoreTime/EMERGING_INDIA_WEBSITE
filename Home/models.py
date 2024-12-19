@@ -26,17 +26,13 @@ class Navigation_link2(models.Model):
         return str(self.Name)
 
 class Team_member(models.Model):
-    Image = models.ImageField(upload_to='team/', null=False)
+    Image = models.URLField(max_length=3000,default='https://drive.google.com/thumbnail?id=1eS5nP8cMj8eJ-Nq_PHTgLa7rJkj5UCPh&sz=s4000')
     Name = models.CharField(max_length=250)
     Position = models.CharField(max_length=200)
     Organization = models.CharField(max_length=400)
     linkedin = models.URLField(null=True, blank=True)
     instagram = models.URLField(null=True, blank=True)
     twitter = models.URLField(null=True, blank=True)
-    def save(self, *args, **kwargs):
-        compressed_image = compress_image(self.Image)
-        self.Image = compressed_image
-        super(Team_member, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
         return 'NAME: '+ str(self.Name) +' POSITION: '+ str(self.Position)

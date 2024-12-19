@@ -536,7 +536,7 @@
     <div class="flex flex-wrap justify-center gap-6">
         {% for member in Team_members %}
         <div class="bg-white p-4 border border-gray-200 rounded-lg shadow-lg max-w-xs w-full transform transition-all hover:scale-105 hover:shadow-2xl hover:border-red-600">
-            <img src="{{ member.Image.url }}" alt="{{ member.Name }}" loading="lazy" class="w-full h-48 object-cover rounded-t-lg mb-4">
+            <img src="{{ member.Image }}" alt="{{ member.Name }}" loading="lazy" class="w-full h-48 object-cover rounded-t-lg mb-4">
             <h2 class="text-2xl font-semibold text-red-600 mb-2">
                 {{ member.Name }}
             </h2>
