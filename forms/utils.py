@@ -91,6 +91,33 @@ def upload_file(file_path):
 
     return f'https://drive.google.com/uc?id={file_id}'
 
+def upload_profile(file_path):
+    creds = authenticate()
+    service = build('drive', 'v3', credentials=creds)
+    file_metadata = {
+        'name': os.path.basename(file_path),
+        'parents': [PARENT_FOLDER_ID_PROFILE]
+    }
+    
+    media = MediaFileUpload(file_path, resumable=True)
+    
+    file = service.files().create(
+        body=file_metadata,
+        media_body=media,
+        fields='id'
+    ).execute()
+    file_id = file.get("id")
+
+    service.permissions().create(
+        fileId=file_id,
+        body={'type': 'anyone', 'role': 'reader'}
+    ).execute()
+
+    
+    return f'https://drive.google.com/thumbnail?id={file_id}&sz=s4000'
+
+
+
 tinify.key = TINIFY
 
 def compress_image(image_file):
@@ -129,6 +156,15 @@ def gallery_image_url(file: object) -> str:
     filename = fs.save(uploaded_file.name, uploaded_file)
     file_path = fs.path(filename)
     file_url = upload_gallery(file_path)
+    fs.delete(filename)
+    return file_url
+
+def profile_image_url(file: object) -> str:
+    uploaded_file = file
+    fs = FileSystemStorage()
+    filename = fs.save(uploaded_file.name, uploaded_file)
+    file_path = fs.path(filename)
+    file_url = upload_profile(file_path)
     fs.delete(filename)
     return file_url
 

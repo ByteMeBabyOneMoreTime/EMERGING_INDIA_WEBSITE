@@ -22,20 +22,8 @@ class User(AbstractUser):
 
 
     # Profile Picture
-    profile_picture = models.ImageField(default='profile/default.png', upload_to='profile/',validators=[validate_image_size])
-    _original_profile_picture = None
-
-    def save(self, *args, **kwargs):
-        if self.pk is not None:
-            if self.profile_picture:
-                validate_image_size(self.profile_picture)
-            self._original_profile_picture = User.objects.get(pk=self.pk).profile_picture
-            if self.profile_picture and self.profile_picture != self._original_profile_picture:
-                self.profile_picture.name = f"{self.username}_profile_picture.jpg"
-                compressed_image = compress_image(self.profile_picture)
-                self.profile_picture = compressed_image
+    profile_picture = models.URLField(max_length=2000, default='https://drive.google.com/thumbnail?id=1eS5nP8cMj8eJ-Nq_PHTgLa7rJkj5UCPh&sz=s4000')
     
-        super(User, self).save(*args, **kwargs)
     
         
 

@@ -4,7 +4,7 @@ from .forms import userRegistration, UserLoginForm, UserUpdateForm, PasswordRese
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
-# Create your views here.
+
 from django.shortcuts import get_object_or_404
 from .models import User, tokens
 from Home.models import Navigation_link
@@ -21,6 +21,9 @@ from .tokens import account_activation_token
 from forms.models import Volunteer_form
 from certificates.models import certificate
 
+from forms.utils import profile_image_url
+from forms.utils import get_file_gallery_id
+from forms.utils import delete_file
 def activate(request, uidb64, token):
     User = get_user_model()
     try:
@@ -75,6 +78,12 @@ def Register(request):
         if form.is_valid():
             user = form.save(commit=False)
             user.is_active = True
+            if 'image' in form.cleaned_data:
+
+                file = form.cleaned_data['image']
+                url = profile_image_url(file=file)
+                user.profile_picture = url
+            
             # made this thing True for Redirecting to the payment page
             user.save()
             activateEmail(request, user, form.cleaned_data.get('email'))
@@ -157,9 +166,24 @@ def update_profile(request):
     user = get_user_model().objects.filter(username=request.user.username).first()
     
     if request.method == "POST":
-        user = request.user
+        user = User.objects.filter(user_id = request.user.user_id).first()  
         form = UserUpdateForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
+            if user.profile_picture != 'https://drive.google.com/thumbnail?id=1eS5nP8cMj8eJ-Nq_PHTgLa7rJkj5UCPh&sz=s4000':
+                url = user.profile_picture
+                address = get_file_gallery_id(url)
+                delete_file(address)
+                user.profile_picture = 'https://drive.google.com/thumbnail?id=1eS5nP8cMj8eJ-Nq_PHTgLa7rJkj5UCPh&sz=s4000'
+                user.save()
+
+            if 'image' in form.cleaned_data:
+                try:
+                    file = form.cleaned_data['image']
+                    url = profile_image_url(file=file)
+                    user.profile_picture = url
+                    user.save()
+                except:
+                    pass
             user_form = form.save()
             messages.success(request, f'{user_form.username}, Your profile has been updated!')
             return redirect('update_profile')
