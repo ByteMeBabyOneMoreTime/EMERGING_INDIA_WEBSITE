@@ -3,6 +3,8 @@ import qrcode
 from io import BytesIO
 from django.contrib.staticfiles import finders
 
+from django.core.files.storage import FileSystemStorage
+import requests
 def make_rounded_image(image, radius):
     # Create a mask to make the image rounded
     mask = Image.new('L', image.size, 0)
@@ -62,7 +64,10 @@ def Generate_id_card(Url: str,full_name: str, status: str, date_joined: str, pro
     draw.text((x,y), Position, font=Montserrat, fill='black')
     join = date_joined
     draw.text((301,932), join, font=Montserrat, fill='black')
-    profile = Image.open(profile_picture)
+    
+    response = requests.get(profile_picture)
+    response.raise_for_status()  # Ensure the request was successful
+    profile = Image.open(BytesIO(response.content))
     profile = profile.convert('RGBA')
     profile = profile.resize((310,310))
     radius = min(profile.size) // 2

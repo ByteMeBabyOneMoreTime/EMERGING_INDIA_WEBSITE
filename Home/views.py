@@ -76,7 +76,7 @@ def id_card_page(request):
             return redirect("create_order/order2")
         else:
             user = User.objects.get(pk=request.user.id)
-            if str(user.profile_picture.url) == "/media/profile/default.png":
+            if str(user.profile_picture) == "https://drive.google.com/thumbnail?id=1eS5nP8cMj8eJ-Nq_PHTgLa7rJkj5UCPh&sz=s4000":
                 messages.error(request, "PLEASE UPDATE YOUR PROFILE PICTURE")
                 return redirect(reverse("update_profile"))
             else:
