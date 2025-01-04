@@ -1,49 +1,23 @@
 {% extends "template.html" %}
 
 {% block title %}
-
 {{ article.title }}
-
 {% endblock title %}
 
 {% block content %}
-<style>
-    
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <!-- Header -->
+  <header class="bg-red-700 text-white py-12 rounded-t-lg shadow-lg">
+    <h1 class="text-5xl md:text-6xl font-extrabold text-center font-montserrat tracking-tight">
+      {{ article.title }}
+    </h1>
+  </header>
 
-    
-
-    /* Page Container */
-    .pages-container {
-        max-width: 1200px;
-        margin: 20px auto;
-        padding: 40px;
-        background-color: #fff;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Header */
-    .pages-header {
-        background-color: rgb(193, 27, 27);
-        color: #fff;
-        padding: 20px;
-        text-align: center;
-    }
-
-    .pages-header h1 {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 2.5em;
-        font-weight: 700;
-        margin-bottom: 0;
-    }
-
-
- </style>
-<div class="pages-container">
-    <header class="pages-header">
-        <h1>{{ article.title }}</h1>
-    </header>
-    <div class="pages-content">
-        {{ article.content|safe }} <!-- Use the safe filter to avoid auto escaping -->
+  <!-- Content Section -->
+  <div class="bg-white p-8 rounded-b-lg shadow-lg">
+    <div class="prose prose-lg max-w-none">
+      {{ article.content|safe }} <!-- Use the safe filter to avoid auto escaping -->
     </div>
+  </div>
 </div>
 {% endblock content %}

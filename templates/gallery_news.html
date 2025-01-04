@@ -1,107 +1,182 @@
 {% extends "template.html" %}
 
-{% block tile %}
-
-Emerging India gallery
-
-{% endblock tile %}
+{% block title %}
+Emerging India Gallery
+{% endblock title %}
 
 {% block style %}
-
 <style>
-    .gallery-container {
-        width: 100%;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-    }
-
+    /* Masonry Layout */
     .masonry-container {
         column-count: 3;
-        column-gap: 15px;
-        padding: 0;
+        column-gap: 1.5rem;
+        margin: 0 auto;
+        padding: 0 1rem;
     }
 
     .masonry-item {
         display: inline-block;
         width: 100%;
-        margin-bottom: 15px;
+        margin-bottom: 1.5rem;
+        break-inside: avoid;
+        position: relative;
+        overflow: hidden;
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .masonry-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
 
     .masonry-item img {
         display: block;
         width: 100%;
-        cursor: pointer;
+        height: auto;
+        border-radius: 0.75rem;
+        transition: transform 0.3s ease;
+    }
+
+    .masonry-item:hover img {
+        transform: scale(1.05);
     }
 
     .masonry-item span {
-        display: block;
-        padding: 10px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 0.75rem;
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+        font-size: 0.875rem;
         text-align: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
     }
 
-    .masonry-item {
-        border: 1px solid #ccc;
-        border-radius: 5px;
+    .masonry-item:hover span {
+        opacity: 1;
     }
 
-    /* Modal styles */
+    /* Lazy Loading Placeholder */
+    .image-placeholder {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: loading-shimmer 1.5s infinite;
+    }
+
+    @keyframes loading-shimmer {
+        0% {
+            background-position: -200% 0;
+        }
+        100% {
+            background-position: 200% 0;
+        }
+    }
+
+    /* Modal Styles */
     .modal {
         display: none;
         position: fixed;
-        z-index: 1;
+        z-index: 1000;
         left: 0;
         top: 0;
         width: 100%;
         height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
         overflow: auto;
-        background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .modal-content-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
     }
 
     .modal-content {
-        margin: 5% auto;
-        display: block;
-        width: 80%;
-        max-width: 700px;
-    }
-
-    .modal-content img {
-        width: 100%;
-        height: auto;
+        max-width: 90%;
+        max-height: 90vh;
+        border-radius: 0.75rem;
+        object-fit: contain; /* Ensures the image maintains its aspect ratio */
     }
 
     .close,
     .prev,
     .next {
         position: absolute;
-        top: 50%;
-        color: #fff;
-        font-size: 40px;
+        color: white;
+        font-size: 2rem;
         font-weight: bold;
         cursor: pointer;
         user-select: none;
+        transition: color 0.3s ease;
     }
 
     .close {
-        top: 20px;
-        right: 35px;
+        top: 1.5rem;
+        right: 2rem;
     }
 
     .prev {
-        left: 15px;
+        left: 2rem;
+        top: 50%;
+        transform: translateY(-50%);
     }
 
     .next {
-        right: 15px;
+        right: 2rem;
+        top: 50%;
+        transform: translateY(-50%);
     }
 
+    .close:hover,
     .prev:hover,
-    .next:hover,
-    .close:hover {
+    .next:hover {
         color: #ddd;
     }
 
-    /* Responsive design */
+    /* Thumbnail Scrolling Bar */
+    .thumbnail-bar {
+        display: none; /* Hidden by default */
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 0.5rem;
+        overflow-x: auto;
+        white-space: nowrap;
+        text-align: center;
+        z-index: 1001;
+    }
+
+    .thumbnail-bar img {
+        display: inline-block;
+        width: 80px;
+        height: 60px;
+        margin: 0 4px;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .thumbnail-bar img:hover {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+
+    .thumbnail-bar img.active {
+        opacity: 1;
+        border: 2px solid white;
+    }
+
+    /* Responsive Design */
     @media (max-width: 1200px) {
         .masonry-container {
             column-count: 2;
@@ -112,52 +187,43 @@ Emerging India gallery
         .masonry-container {
             column-count: 1;
         }
-
-        .modal-content {
-            width: 90%;
-        }
-    }
-
-    @media (max-width: 600px) {
-
-        .close,
-        .prev,
-        .next {
-            font-size: 30px;
-        }
-
-        .gallery-container {
-            padding: 0;
-        }
     }
 </style>
-
 {% endblock style %}
 
 {% block content %}
-<div style="display: flex; justify-content: center; gap: 10px; margin: 20px 0;">
+<!-- Category Navigation -->
+<div class="flex flex-wrap justify-center gap-4 my-8">
     <a href="{% url 'gallery:news' 'all' %}"
-        style="display: inline-block; padding: 10px 20px; text-decoration: none; background-color: rgb(193, 27, 27); color: white; border-radius: 5px; transition: background-color 0.3s ease;">all
-        News</a>
-    {% for x in categories %}
-    <a href="{% url 'gallery:news' x %}"
-        style="display: inline-block; padding: 10px 20px; text-decoration: none; background-color: rgb(193, 27, 27); color: white; border-radius: 5px; transition: background-color 0.3s ease;">
-        {{ x }}</a>
+        class="px-6 py-3 bg-red-600 text-white rounded-xl shadow-md hover:bg-red-700 transition-all duration-300 transform hover:scale-105 hover:shadow-xl text-md font-medium tracking-wide">
+        All News
+    </a>
+    {% for category in categories %}
+    <a href="{% url 'gallery:news' category %}"
+        class="px-6 py-3 bg-red-600 text-white rounded-xl shadow-md hover:bg-red-700 transition-all duration-300 transform hover:scale-105 hover:shadow-xl text-md font-medium tracking-wide">
+        {{ category }}
+    </a>
     {% endfor %}
 </div>
 
-
+<!-- Masonry Gallery -->
 <div class="gallery-container">
     <div class="masonry-container">
         {% for image in images %}
         <div class="masonry-item">
-            <img src="{{image.url}}" onclick="openModal(this, 0)" />
-            <span>{{image.category}}</span>
+            <div class="image-placeholder absolute inset-0 w-full h-64"></div>
+            <img 
+                src="{{ image.url }}" 
+                alt="{{ image.category }}" 
+                loading="lazy" 
+                class="w-full h-64 object-cover opacity-0 transition-opacity duration-300"
+                onload="this.classList.add('opacity-100'); this.previousElementSibling.classList.add('hidden');"
+                onclick="openModal(this, {{ forloop.counter0 }})"
+            />
+            <span>{{ image.category }}</span>
         </div>
         {% endfor %}
     </div>
-</div>
-
 </div>
 
 <!-- Modal -->
@@ -165,33 +231,52 @@ Emerging India gallery
     <span class="close" onclick="closeModal()">&times;</span>
     <span class="prev" onclick="prevImage()">&#10094;</span>
     <span class="next" onclick="nextImage()">&#10095;</span>
-    <img class="modal-content" id="modalImage">
+    <div class="modal-content-container">
+        <img class="modal-content" id="modalImage">
+    </div>
+</div>
+
+<!-- Thumbnail Scrolling Bar -->
+<div id="thumbnailBar" class="thumbnail-bar">
+    {% for image in images %}
+    <img 
+        src="{{ image.url }}" 
+        alt="Thumbnail {{ forloop.counter }}" 
+        onclick="jumpToImage({{ forloop.counter0 }})"
+    />
+    {% endfor %}
 </div>
 
 <script>
     let currentIndex = 0;
     const images = [
         {% for image in images %}
-    "{{image.url}}",
+        "{{ image.url }}",
         {% endfor %}
-        ];
+    ];
+
+    const modal = document.getElementById("myModal");
+    const modalImg = document.getElementById("modalImage");
+    const thumbnailBar = document.getElementById("thumbnailBar");
+    const thumbnails = document.querySelectorAll("#thumbnailBar img");
 
     function openModal(img, index) {
-        const modal = document.getElementById("myModal");
-        const modalImg = document.getElementById("modalImage");
         modal.style.display = "block";
+        thumbnailBar.style.display = "block"; // Show thumbnail bar
         modalImg.src = img.src;
         currentIndex = index;
+        updateThumbnails();
     }
 
     function closeModal() {
-        const modal = document.getElementById("myModal");
         modal.style.display = "none";
+        thumbnailBar.style.display = "none"; // Hide thumbnail bar
     }
 
     function showImage(index) {
-        const modalImg = document.getElementById("modalImage");
         modalImg.src = images[index];
+        currentIndex = index;
+        updateThumbnails();
     }
 
     function prevImage() {
@@ -212,11 +297,44 @@ Emerging India gallery
         showImage(currentIndex);
     }
 
+    function jumpToImage(index) {
+        showImage(index);
+    }
+
+    function updateThumbnails() {
+        thumbnails.forEach((thumb, i) => {
+            if (i === currentIndex) {
+                thumb.classList.add("active");
+            } else {
+                thumb.classList.remove("active");
+            }
+        });
+    }
+
+    // Keyboard Navigation
+    document.addEventListener('keydown', (e) => {
+        if (modal.style.display === "block") {
+            switch (e.key) {
+                case 'Escape':
+                    closeModal();
+                    break;
+                case 'ArrowLeft':
+                    prevImage();
+                    break;
+                case 'ArrowRight':
+                    nextImage();
+                    break;
+            }
+        }
+    });
+
+    // Close Modal on Click Outside
     window.onclick = function (event) {
-        const modal = document.getElementById("myModal");
         if (event.target == modal) {
             modal.style.display = "none";
+            thumbnailBar.style.display = "none"; // Hide thumbnail bar
         }
-    }
+    };
 </script>
 {% endblock content %}
+
