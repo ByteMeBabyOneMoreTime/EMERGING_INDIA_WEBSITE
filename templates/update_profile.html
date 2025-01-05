@@ -1,21 +1,40 @@
 {% extends "template.html" %}
 
-{% block title %}
-Edit Profile
-{% endblock title %}
+{% block title %}Edit Profile{% endblock title %}
 
 {% block content %}
-<!-- Tailwind CSS CDN -->
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<style>
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+    .float-animation {
+        animation: float 3s ease-in-out infinite;
+    }
+    .file-drop-zone {
+        transition: all 0.3s ease;
+    }
+    .file-drop-zone.dragover {
+        background-color: rgba(239, 68, 68, 0.1);
+        border-color: rgb(239, 68, 68);
+    }
+</style>
 
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-2xl mx-auto">
-        <!-- Messages -->
+    <div class="max-w-3xl mx-auto">
+        <!-- Messages with Animation -->
         {% if messages %}
         <div class="space-y-4 mb-8">
             {% for message in messages %}
-            <div class="p-4 bg-blue-50 border-l-4 border-blue-400 text-blue-700 rounded-lg shadow-sm">
-                {{ message }}
+            <div class="animate__animated animate__fadeInDown p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-lg">
+                <div class="flex items-center">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    {{ message }}
+                </div>
             </div>
             {% endfor %}
         </div>
@@ -23,62 +42,158 @@ Edit Profile
 
         <!-- Edit Profile Form -->
         {% if user.username == form.instance.username %}
-        <form method="post" enctype="multipart/form-data" class="bg-white rounded-xl shadow-lg p-6 sm:p-8">
-            {% csrf_token %}
-            <fieldset class="space-y-6">
-                <legend class="text-2xl font-bold text-red-600 mb-6">Edit Profile Information</legend>
+        <div class="bg-white rounded-2xl shadow-2xl overflow-hidden animate__animated animate__fadeIn">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-red-600 to-red-700 px-8 py-6">
+                <h1 class="text-3xl font-bold text-white animate__animated animate__fadeInDown">
+                    Edit Your Profile
+                </h1>
+                <p class="text-red-100 mt-2">Update your personal information and profile picture</p>
+            </div>
 
-                <!-- First Name -->
-                <div class="space-y-2">
-                    <label for="id_first_name" class="block text-sm font-medium text-gray-700">First Name</label>
-                    <input type="text" name="first_name" id="id_first_name" value="{{ form.first_name.value }}"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-300"
-                        required>
+            <form method="post" enctype="multipart/form-data" class="p-8" id="profileForm">
+                {% csrf_token %}
+                <div class="space-y-8">
+                    <!-- Profile Image Upload Section -->
+                    <div class="relative">
+                        <div class="flex justify-center">
+                            <div class="relative group">
+                                <img id="preview" src="{{ form.instance.profile_picture.url|default:'/static/placeholder.png' }}" 
+                                     alt="Profile Preview" 
+                                     class="w-32 h-32 rounded-full object-cover border-4 border-red-500 shadow-lg group-hover:opacity-75 transition-all duration-300">
+                                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <div class="text-white text-center">
+                                        <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- File Drop Zone -->
+                        <div id="dropZone" class="mt-6 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center file-drop-zone cursor-pointer hover:border-red-500 transition-colors duration-300">
+                            <input type="file" name="image" id="id_image" class="hidden" accept="image/*">
+                            <div class="float-animation">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <p class="mt-4 text-sm text-gray-600">
+                                    <span class="font-medium text-red-600 hover:text-red-500">Upload a file</span> or drag and drop
+                                </p>
+                                <p class="mt-1 text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Fields -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- First Name -->
+                        <div class="animate__animated animate__fadeInLeft">
+                            <label for="id_first_name" class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                            <input type="text" name="first_name" id="id_first_name" value="{{ form.first_name.value }}"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-300"
+                                required>
+                        </div>
+
+                        <!-- Last Name -->
+                        <div class="animate__animated animate__fadeInRight">
+                            <label for="id_last_name" class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                            <input type="text" name="last_name" id="id_last_name" value="{{ form.last_name.value }}"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-300"
+                                required>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="animate__animated animate__fadeInUp">
+                        <label for="id_email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                        <input type="email" name="email" id="id_email" value="{{ form.email.value }}"
+                            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-300"
+                            required>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex items-center justify-between">
+                        <a href="/" class="text-sm text-red-600 hover:text-red-700 transition-colors duration-300 flex items-center">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                            </svg>
+                            Change password
+                        </a>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit"
+                        class="w-full px-6 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white text-lg font-semibold rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 animate__animated animate__fadeInUp">
+                        Update Profile
+                        <span class="ml-2">→</span>
+                    </button>
                 </div>
-
-                <!-- Last Name -->
-                <div class="space-y-2">
-                    <label for="id_last_name" class="block text-sm font-medium text-gray-700">Last Name</label>
-                    <input type="text" name="last_name" id="id_last_name" value="{{ form.last_name.value }}"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-300"
-                        required>
-                </div>
-
-                <!-- Email -->
-                <div class="space-y-2">
-                    <label for="id_email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" name="email" id="id_email" value="{{ form.email.value }}"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-300"
-                        required>
-                </div>
-
-                <!-- Profile Image -->
-                <div class="space-y-2">
-                    <label for="id_image" class="block text-sm font-medium text-gray-700">Profile Image</label>
-                    <input type="file" name="image" id="id_image"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-300">
-                </div>
-
-                <!-- Change Password Link -->
-                <div class="text-sm text-red-600 hover:text-red-700 transition-colors duration-300">
-                    <a href="/">Change password?</a>
-                </div>
-            </fieldset>
-
-            <!-- Submit Button -->
-            <button type="submit"
-                class="w-full mt-6 px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                Update
-            </button>
-        </form>
+            </form>
+        </div>
         {% endif %}
     </div>
 </div>
 
-<!-- Script to Hide Submit Button on Form Submission -->
 <script>
-    document.querySelector('form').addEventListener('submit', function () {
-        document.querySelector('button[type="submit"]').style.display = 'none';
+    // File Drop Zone Functionality
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('id_image');
+    const preview = document.getElementById('preview');
+
+    // Drag and drop handlers
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length) {
+            handleFile(files[0]);
+        }
+    });
+
+    // Click to upload
+    dropZone.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length) {
+            handleFile(e.target.files[0]);
+        }
+    });
+
+    function handleFile(file) {
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                preview.src = e.target.result;
+                preview.classList.add('animate__animated', 'animate__pulse');
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // Form submission handler
+    document.getElementById('profileForm').addEventListener('submit', function(e) {
+        const submitButton = this.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.innerHTML = `
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Updating...
+        `;
     });
 </script>
 {% endblock content %}
