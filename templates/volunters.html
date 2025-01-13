@@ -5,28 +5,71 @@
 Our Volunteers
 {% endblock title %}
 
-
 {% block content %}
-<div style="font-family: Arial, sans-serif; background-color: #f3f0f9; color: #4a148c; margin: 0; padding: 20px;">
+<style>
+    @keyframes bounce {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+    .animate-bounce {
+        animation: bounce 1.5s infinite;
+    }
+</style>
 
-    <h1 style="text-align: center; font-size: 36px; margin-bottom: 20px;">Our Volunteers</h1>
-    <a href="https://emergingindia.org/forms/volunteer">
-        <h3 style="text-align: center; font-size: 36px; margin-bottom: 20px;">Click here to apply</h3>
-    </a>
-
-    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
-
-        {% for x in volunteers %}
-        <div
-            style="background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden; width: 200px; text-align: center; padding: 15px; transition: transform 0.2s ease-in-out;">
-            <img src="{{ x.user.profile_picture }}" alt="{{ x.user.first_name }} {{ x.user.last_name }}"
-                style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px;">
-            <p style="font-size: 18px; font-weight: bold; color: #4a148c; margin: 0;">{{ x.user.first_name }}
-                {{x.user.last_name }}</p>
+<div class="min-h-screen bg-gradient-to-b from-white to-gray-50 p-6 md:p-8 lg:p-12">
+    <!-- Header Section -->
+    <div class="relative mx-auto max-w-7xl mb-24">
+        <div class="transform transition-transform duration-300 hover:scale-105">
+            <div class="bg-gradient-to-r from-rose-800 to-red-500 rounded-3xl shadow-2xl overflow-hidden">
+                <div class="relative z-10 px-6 py-16 md:py-20 lg:py-24">
+                    <h1 class="text-4xl md:text-6xl font-extrabold text-white text-center tracking-tight uppercase mb-8">
+                        Our Volunteers
+                    </h1>
+                    <p class="mt-6 text-xl text-rose-100 text-center max-w-3xl mx-auto">
+                        Join our amazing team of dedicated volunteers who make a difference every day
+                    </p>
+                    <div class="mt-10 flex justify-center">
+                        <a href="https://emergingindia.org/forms/volunteer"
+                            class="inline-flex items-center px-8 py-4 border-2 border-white text-lg font-bold rounded-full text-white hover:bg-white hover:text-red-600 transition-all duration-300 hover:scale-105 transform animate-bounce">
+                            Become a Volunteer
+                        </a>
+                    </div>
+                </div>
+                <!-- Decorative Elements -->
+                <div class="absolute top-0 right-0 -mt-8 -mr-8 h-32 w-32 rounded-full bg-rose-300 opacity-20"></div>
+                <div class="absolute bottom-0 left-0 -mb-8 -ml-8 h-24 w-24 rounded-full bg-red-400 opacity-20"></div>
+            </div>
         </div>
-        {% endfor %}
-
     </div>
 
+    <!-- Volunteers Grid -->
+    <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for x in volunteers %}
+            <div class="group">
+                <div class="aspect-square relative overflow-hidden rounded-3xl bg-white p-8 shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-2 border-2 border-red-700 hover:border-transparent">
+                    <div class="absolute top-0 right-0 -mt-8 -mr-8 h-32 w-32 rounded-full bg-rose-100 opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
+                    
+                    <div class="relative h-full flex flex-col items-center justify-center">
+                        <div class="w-48 h-48 rounded-full overflow-hidden mb-8 border-4 border-rose-100 shadow-lg">
+                            <img src="{{ x.user.profile_picture }}"
+                                alt="{{ x.user.first_name|title }} {{ x.user.last_name|title }}"
+                                class="h-full w-full object-cover transform group-hover:scale-110 transition duration-300">
+                        </div>
+                        
+                        <!-- Name with Proper Capitalization -->
+                        <h3 class="text-2xl font-bold text-gray-900 text-center group-hover:text-rose-600 transition duration-300">
+                            {{ x.user.first_name|title }} {{ x.user.last_name|title }}
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
 {% endblock content %}
