@@ -1,0 +1,120 @@
+{% extends "template.html" %}
+
+{% block title %}Volunteer Details{% endblock title %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #ffebee;
+        color: #fff;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
+
+    h2 {
+        color: #b71c1c;
+    }
+
+    /* Search Input */
+    #searchInput {
+        width: 80%;
+        max-width: 400px;
+        padding: 10px;
+        margin: 20px auto;
+        border: 2px solid #b71c1c;
+        border-radius: 5px;
+        font-size: 16px;
+        background-color: white;
+        color: black;
+        display: block;
+    }
+
+    /* Responsive Table */
+    .table-container {
+        width: 100%;
+        overflow-x: auto; /* Enables horizontal scroll on small screens */
+        padding: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #b71c1c;
+        color: white;
+        border-radius: 8px;
+        overflow: hidden;
+        min-width: 600px; /* Prevents squeezing on small screens */
+    }
+
+    th, td {
+        padding: 12px;
+        border-bottom: 1px solid #880e4f;
+        text-align: center;
+        white-space: nowrap; /* Prevents text wrapping */
+    }
+
+    th {
+        background-color: #880e4f;
+    }
+
+    tr:hover {
+        background-color: #d32f2f;
+    }
+
+    /* Mobile & Tablet Responsiveness */
+    @media screen and (max-width: 768px) {
+        .table-container {
+            overflow-x: auto;
+        }
+    }
+</style>
+
+<!-- Search Input -->
+<input type="text" id="searchInput" placeholder="Search for volunteers..." onkeyup="searchTable()">
+
+<!-- Table Wrapper for Responsive Scroll -->
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Full Name</th>
+                <th>Father's Name</th>
+                <th>DOB</th>
+                <th>Gender</th>
+                <th>Joining Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for volunteer in volunteers %}
+            <tr>
+                <td>{{ volunteer.user.username }}</td>
+                <td>{{ volunteer.user.get_full_name|default:volunteer.user.username }}</td>
+                <td>{{ volunteer.Fathers_name }}</td>
+                <td>{{ volunteer.DOB }}</td>
+                <td>{{ volunteer.Gender }}</td>
+                <td>{{ volunteer.user.date_joined }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">No volunteers found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function searchTable() {
+        let input = document.getElementById("searchInput").value.toLowerCase();
+        let rows = document.querySelectorAll("tbody tr");
+
+        rows.forEach(row => {
+            let text = row.textContent.toLowerCase();
+            row.style.display = text.includes(input) ? "" : "none";
+        });
+    }
+</script>
+{% endblock content %}

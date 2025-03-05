@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from . import forms_download_views
+from . import other_views
 
 urlpatterns = [
     path('your_problem', view = views.Your_problem, name='your_problem'),
@@ -20,7 +21,8 @@ urlpatterns = [
     path('shiksha_sankalp_view', view=views.shiksha_sankalp_view, name='shiksha_sankalp_view'),
     path('employment_generation_view', view=views.employment_generation_view, name='employment_generation_view'),
     path('road_safety_view', view=views.road_safety_view, name='road_safety_view'),
-    path('cancer_awareness_view', view=views.cancer_awareness_view, name='cancer_awareness_view')
+    path('cancer_awareness_view', view=views.cancer_awareness_view, name='cancer_awareness_view'),
+    path('volunteers_data', other_views.volunteer_list, name='volunteer_list'),
 ]
 
 
